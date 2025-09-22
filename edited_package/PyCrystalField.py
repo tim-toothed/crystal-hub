@@ -3,8 +3,6 @@
 import numpy as np
 from scipy import optimize
 import scipy.linalg as LA
-#import numpy.linalg as LA
-#from scipy.linalg import eig
 from scipy.special import wofz
 import sys, os
 from pcf_lib.form_factors import RE_FormFactor
@@ -15,22 +13,15 @@ from pcf_lib.Operators import Ket, Operator, LSOperator
 from pcf_lib.StevensOperators import StevensOp, LS_StevensOp
 from pcf_lib.PointChargeConstants import *
 from pcf_lib.PCF_misc_functions import *
-from numba import njit #, jitclass
+from numba import njit
 try:
     from numba.experimental import jitclass
 except ModuleNotFoundError:
     from numba import jitclass
 from copy import deepcopy
 
-# abspath = os.path.abspath(__file__)
-# dname = os.path.dirname(abspath)
-# os.chdir(dname)
-
-
 print(' '+'*'*55 + '\n'+
      ' *                PyCrystalField 2.3.11               *\n' +
-    #' *  Code to calculate the crystal Field Hamiltonian    *\n' +
-    #' *   of magentic ions.                                 *\n' +
     ' *  Please cite  J. Appl. Cryst. (2021). 54, 356-362   * \n' +
     ' *    <https://doi.org/10.1107/S160057672001554X>      *\n ' + '*'*55+'\n')
 
@@ -1418,17 +1409,6 @@ class LS_Ligands:
         newobj.B = nonzeroB
         return newobj
 
-
-
-
-    def ReMakePointChargeModel(newcharges):
-        # make charges into list
-        if self.symequiv == None:
-            charge = self.IonCharge*[newcharges]*len(self.bonds)
-        else:
-            charge = [0]*len(self.bonds)
-            for i,se in enumerate(self.symequiv):
-                charge[i] = self.IonCharge*newcharges[se]
 
     def FitChargesNeutrons(self, chisqfunc, fitargs, method='Powell', **kwargs):
         '''fits neutron data'''
