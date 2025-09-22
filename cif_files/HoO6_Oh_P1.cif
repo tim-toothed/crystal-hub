@@ -1,0 +1,42 @@
+# HoO6_Oh_P1.cif — ideal octahedron around Ho (P 1, single center, 6 O)
+
+data_HoO6_Oh_P1
+_audit_creation_method             "ideal Oh test (single Ho + 6 O)"
+_chemical_formula_sum              'Ho O6'
+_space_group_name_H-M_alt          'P 1'
+_space_group_IT_number             1
+_cell_length_a                     10.00000
+_cell_length_b                     10.00000
+_cell_length_c                     10.00000
+_cell_angle_alpha                  90.00000
+_cell_angle_beta                   90.00000
+_cell_angle_gamma                  90.00000
+_cell_volume                       1000.00000
+
+loop_
+  _space_group_symop_operation_xyz
+  'x, y, z'
+
+
+loop_
+  _atom_type_symbol
+  _atom_type_oxidation_number
+  Ho 3
+  O  -2
+
+
+loop_
+  _atom_site_label
+  _atom_site_type_symbol
+  _atom_site_fract_x
+  _atom_site_fract_y
+  _atom_site_fract_z
+  _atom_site_occupancy
+  _atom_site_B_iso_or_equiv
+  Ho1 Ho 0.50000 0.50000 0.50000 1.0000 1.0
+  O1  O  0.60000 0.50000 0.50000 1.0000 1.0
+  O2  O  0.40000 0.50000 0.50000 1.0000 1.0
+  O3  O  0.50000 0.60000 0.50000 1.0000 1.0
+  O4  O  0.50000 0.40000 0.50000 1.0000 1.0
+  O5  O  0.50000 0.50000 0.60000 1.0000 1.0
+  O6  O  0.50000 0.50000 0.40000 1.0000 1.0

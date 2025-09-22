@@ -1,0 +1,41 @@
+# Created by the Bilbao Crystallographic Server
+# http://www.cryst.ehu.es
+# Date: 04/09/2025 18:23:34
+
+# 0.994_HoFeO3.mcif -- non-magnetic
+
+data_BMHkZqDx
+_audit_creation_date               2025-09-04
+_audit_creation_method             "Bilbao Crystallographic Server"
+_symmetry_Int_Tables_number        62
+#_symmetry_space_group_name_H-M    "Pnma1'"
+_cell_length_a                     5.58250
+_cell_length_b                     7.58450
+_cell_length_c                     5.26800
+_cell_angle_alpha                  90.00000
+_cell_angle_beta                   90.00000
+_cell_angle_gamma                  90.00000
+
+loop_
+_symmetry_equiv_pos_site_id
+_symmetry_equiv_pos_as_xyz
+   1   x,y,z
+   2   -x+1/2,-y,z+1/2
+   3   -x,-y,-z
+   4   x+1/2,y,-z+1/2
+   5   x+1/2,-y+1/2,-z+1/2
+   6   -x,y+1/2,-z
+   7   -x+1/2,y+1/2,z+1/2
+   8   x,-y+1/2,z
+
+loop_
+_atom_site_label
+_atom_site_type_symbol
+_atom_site_fract_x
+_atom_site_fract_y
+_atom_site_fract_z
+_atom_site_occupancy
+Ho1 Ho 0.48130 0.43140 0.75000 1.0000
+Fe1 Fe 0.50000 0.00000 0.00000 1.0000
+O1 O 0.60980 0.03990 0.75000 1.0000
+O2 O 0.69200 0.30480 0.05640 1.0000
