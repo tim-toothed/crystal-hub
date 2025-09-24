@@ -1,46 +1,45 @@
-# Отредактированные модули
+# Отредактированные модули (pcf_lib + PyCrystalField)
 
-24.09 - pcf_lib + PyCrystalField
-1. [wybourne_stevens.py]
-    Contents:
+1. [wybourne_stevens.py](wybourne_stevens.py)
+    **Contents**:
         - `WybourneToStevens` (function)
         - `StevensToWybourne` (function)
-    Inner dependencies:
+    **Inner Dependencies**:
         - `from constants import LambdaConstants, LStheta, theta`
-    Outer Dependencies:
+    **Outer Dependencies**:
         - None
 
-2. [thermo_functions.py]
-    Contents:
+2. [thermo_functions.py](thermo_functions.py)
+    **Contents**:
         - `partition_func` (function)
         - `Cp_from_CEF` (function)
-    Inner Dependencies:
+    **Inner Dependencies**:
         - `from constants import k_b`
-    Outer Dependencies:
+    **Outer Dependencies**:
         - `import numpy as np`
 
-3. [stevens_operators.py]
-    Contents:
+3. [stevens_operators.py](stevens_operators.py)
+    **Contents**:
         - `StevensOp` (function)
         - `LS_StevensOp` (function)
-    Inner Dependencies:
+    **Inner Dependencies**:
         - `from operators import Operator`
-    Outer Dependencies:
+    **Outer Dependencies**:
         - `import numpy as np`
 
-4. [rescale_CEF.py]
-    Contents:
+4. [rescale_CEF.py](rescale_CEF.py)
+    **Contents**:
         - `rescaleCEF` (function)
-    Inner Dependencies:
+    **Inner Dependencies**:
         - `from constants import theta, RadialIntegral`
-    Outer Dependencies:
+    **Outer Dependencies**:
         - None
 
-5. [PyCrystalField.py]
+5. [PyCrystalField.py](PyCrystalField.py)
     Main file for all imports
 
-6. [plot_ligands.py]
-    Contents:
+6. [plot_ligands.py](plot_ligands.py)
+    **Contents**:
         - `plotPCF` (function)
         - `exportLigandCif` (function)
         - `atomplot` (class)
@@ -49,14 +48,14 @@
             - `plotaxes` (method)
             - `plotabc` (method)
             - `_flatten` (method)
-    Inner Dependencies:
+    **Inner Dependencies**:
         - None
-    Outer Dependencies:
+    **Outer Dependencies**:
         - `import numpy as np`
         - `import matplotlib.pyplot as plt`
 
-7. [operators.py]
-    Contents:
+7. [operators.py](operators.py)
+    **Contents**:
         - `Ket` (class)
             - `__init__` (method)
             - `Jz` (method)
@@ -107,13 +106,13 @@
             - `__repr__` (method)
             - `magnetization` (method)
             - `susceptibility` (method)
-    Inner Dependencies:
+    **Inner Dependencies**:
         - None
-    Outer Dependencies:
+    **Outer Dependencies**:
         - `import numpy as np`
 
-8. [moments_of_inertia.py]
-    Contents:
+8. [moments_of_inertia.py](moments_of_inertia.py)
+    **Contents**:
         - `MomIntertia` (function)
         - `selectZaxisMI` (function)
         - `ContinuousShapeMeasure` (function)
@@ -122,15 +121,15 @@
         - `rotateArbAxis` (function)
         - `findZaxis_SOM_rotation` (function)
         - `findZaxis` (function)
-    Inner Dependencies:
+    **Inner Dependencies**:
         - None
-    Outer Dependencies:
+    **Outer Dependencies**:
         - `import numpy as np`
         - `from numba import njit`
         - `from scipy.optimize import minimize`
 
-9. [ligands.py]
-    Contents:
+9. [ligands.py](ligands.py)
+    **Contents**:
         - `Ligands` (class)
             - `__init__` (method)
             - `rotateLigands` (method)
@@ -149,7 +148,7 @@
             - `TMPointChargeModel` (method)
             - `UnknownTMPointChargeModel` (method)
             - `FitChargesNeutrons` (method)
-    Inner Dependencies:
+    **Inner Dependencies**:
         - `from lattice_class import Lattice`
         - `from plot_ligands import exportLigandCif`
         - `from constants import TessHarm, theta, RadialIntegral, Constant, LStheta, PFalpha, PFbeta, RadialIntegral_TM, Jion`
@@ -158,73 +157,73 @@
         - `from create_fit_function import makeFitFunction`
         - `from cf_levels import CFLevels, LS_CFLevels`
         - `from operators import LSOperator`
-    Outer Dependencies:
+    **Outer Dependencies**:
         - `import numpy as np`
         - `from scipy import optimize`
 
-10. [lattice_class.py]
-    Contents:
+10. [lattice_class.py](lattice_class.py)
+    **Contents**:
         - `Lattice` (class)
             - `__init__` (method)
             - `reciplatt` (method)
             - `cartesian` (method)
             - `ABC` (method)
             - `inverseA` (method)
-    Inner Dependencies:
+    **Inner Dependencies**:
         - None
-    Outer Dependencies:
+    **Outer Dependencies**:
         - `import numpy as np`
 
-11. [latex_cef_print.py]
-    Contents:
+11. [latex_cef_print.py](latex_cef_print.py)
+    **Contents**:
         - `printLaTexCEFparams` (function)
-    Inner Dependencies:
+    **Inner Dependencies**:
         - None
-    Outer Dependencies:
+    **Outer Dependencies**:
         - `import numpy as np`
 
-12. [import_CIF.py]
-    Contents:
+12. [import_CIF.py](import_CIF.py)
+    **Contents**:
         - `importCIF` (function)
         - `checkTMexist` (function)
-    Inner Dependencies:
+    **Inner Dependencies**:
         - `from cifsymmetryimport import FindPointGroupSymOps`
         - `from cif_file import CifFile`
         - `from constants import Jion, SpOrbCoup, TMradialI, HalfList, notHalfList`
         - `from ligands import Ligands, LS_Ligands`
-    Outer Dependencies:
+    **Outer Dependencies**:
         - `import numpy as np`
         - `from copy import deepcopy`
 
-13. [half_filled.py]
-    Contents:
+13. [half_filled.py](half_filled.py)
+    **Contents**:
         - `IsHalfFilled` (function) <- копирует `notHalfList` (dict) и `HalfList` (dict), которые есть в constants - перенести
-    Inner Dependencies:
+    **Inner Dependencies**:
         - None
-    Outer Dependencies:
+    **Outer Dependencies**:
         - None
 
-14. [form_factors.py]
-    Contents:
+14. [form_factors.py](form_factors.py)
+    **Contents**:
         - `importRE_FF` (function)
         - `RE_FormFactor` (function)
-    Inner Dependencies:
+    **Inner Dependencies**:
         - `from constants import Jion`
         - [RE_formfactors.pck] <- перенести в локальное окружение
-    Outer Dependencies:
+    **Outer Dependencies**:
         - `import numpy as np`
 
-15. [create_fit_function.py] <- ERROR: inconsistent use of tabs and spaces in indentation (Беды_с_башкой.py)
-    Contents:
+15. [create_fit_function.py](create_fit_function.py) <- ERROR: inconsistent use of tabs and spaces in indentation (Беды_с_башкой.py)
+    **Contents**:
         - `makeFitFunction` (function)
         - `makeCurveFitFunction` (function)
-    Inner Dependencies:
+    **Inner Dependencies**:
         - None
-    Outer Dependencies:
+    **Outer Dependencies**:
         - None
 
-16. [constants.py]
-    Contents:
+16. [constants.py](constants.py)
+    **Contents**:
         - `JionTM` (dict)
         - `Jion` (dict)
         - `LambdaConstants` (dict)      
@@ -249,25 +248,25 @@
         - `a0` (float)
         - `muB` (float)
         - `k_B` (float)
-    Inner Dependencies:
+    **Inner Dependencies**:
         - ``
-    Outer Dependencies:
+    **Outer Dependencies**:
         - `import numpy as np`
         - `from typing import Union, Dict`
 
-17. [cif_symmetry_import.py] <- ERROR: inconsistent use of tabs and spaces in indentation
-    Contents:
+17. [cif_symmetry_import.py](cif_symmetry_import.py) <- ERROR: inconsistent use of tabs and spaces in indentation
+    **Contents**:
         - `FindPointGroupSymOps` (function)
         - `findRotationAxis` (function)
         - `makeSymOpMatrix` (function)
-    Inner Dependencies:
+    **Inner Dependencies**:
         - `from plot_ligands import plotPCF`
         - `from moments_of_inertia import findZaxis`
-    Outer Dependencies:
+    **Outer Dependencies**:
         - `import numpy as np`
 
-18. [cif_file.py]
-    Contents:
+18. [cif_file.py](cif_file.py)
+    **Contents**:
         - `CifFile` (Class)
             - `__init__` (method)
             - `SymOperate` (method)
@@ -279,14 +278,14 @@
             - `_duplicaterow` (method)
             - `_NumElements` (method)
             - `_kvector` (method)
-    Inner Dependencies:
+    **Inner Dependencies**:
         - `from lattice_class import lattice`
-    Outer Dependencies:
+    **Outer Dependencies**:
         - `import numpy as np`
         - `from copy import deepcopy`
 
-19. [cf_levels.py]
-    Contents:
+19. [cf_levels.py](cf_levels.py)
+    **Contents**:
         - `CFLevels` (class)
             - `__init__` (method)
             - `Bdict` (method)
@@ -346,13 +345,13 @@
             - `gtensorperturb` (method)
             - `fitdata` (method)
             - `printLaTexEigenvectors` (method)
-    Inner Dependencies:
+    **Inner Dependencies**:
         - `from constants import Jion`
         - `from form_factors import RE_FormFactor`
         - `from create_fit_function import makeFitFunction`
         - `from operators import Ket, Operator, LSOperator`
         - `from stevens_operators import StevensOp, LS_StevensOp`
-    Outer Dependencies:
+    **Outer Dependencies**:
         - `import numpy as np`
         - `from numba import jitclass, float64`
         - `from scipy import optimize`

@@ -873,7 +873,6 @@ class LS_CFLevels:
         newH = np.sum([a*b for a,b in zip(self.O, newcoeff)], axis=0)
         self.diagonalize(newH)
 
-
     def diagonalize(self, CEF_Hamiltonian=None):
         '''same as above, but using the Scipy eig_banded function'''
         if CEF_Hamiltonian is None:
@@ -905,8 +904,6 @@ class LS_CFLevels:
             if np.count_nonzero(np.around(diag,10)) > 0:
                 nonzerobands = i
         return diags[:nonzerobands+1]
-
-
 
     def neutronSpectrum(self, Earray, Temp, Ei, ResFunc, gamma = 0):
         try:
@@ -944,7 +941,6 @@ class LS_CFLevels:
         kpoverk = np.sqrt((Ei - Earray)/Ei) #k'/k = sqrt(E'/E)
         return intensity * kpoverk
 
-
     # Shared
     def neutronSpectrum2D(self, Earray, Qarray, Temp, Ei, ResFunc, gamma, DebyeWaller, Ion):
         intensity1D = self.neutronSpectrum(Earray, Temp, Ei, ResFunc,  gamma)
@@ -954,7 +950,6 @@ class LS_CFLevels:
         # Scale by form factor
         FormFactor = RE_FormFactor(Qarray,Ion)
         return np.outer(intensity1D, DWF*FormFactor)
-
 
     def normalizedNeutronSpectrum(self, Earray, Temp, ResFunc, gamma = 0):
         '''neutron spectrum without the ki/Kf correction'''
@@ -988,7 +983,6 @@ class LS_CFLevels:
                                                     gamma=gamma)).real).astype('float64')
                 #intensity += ((pn * mJn * self._lorentzian(Earray, deltaE, Width)).real).astype('float64')
         return intensity
-
 
     def _transition(self,ket1,ket2):
         """Computes \sum_a |<|J_a|>|^2 = \sum_a |<|L_a + S_a|>|^2"""
@@ -1027,6 +1021,7 @@ class LS_CFLevels:
         sigma = (0.5*alpha) / np.sqrt(2 * np.log(2))
         return np.real(wofz(((x-x0) + 1j*(0.5*gamma))/sigma/np.sqrt(2))) / sigma\
                                                             /np.sqrt(2*np.pi)
+    
     # Shared
     def _Re(self,value):
         thresh = 1e-9
@@ -1068,7 +1063,6 @@ class LS_CFLevels:
             jjzz = self._Re(np.dot(ev,np.dot(self.Jzg0.O,ev)))
             print('  <J_x> =',jjxx,'\t<J_y> =',jjyy,'\t<J_z> =',jjzz)
         print(' ')
-
 
     def magnetization(self, Temp, Field):
         '''field should be a 3-component vector. Temps may be an array.'''
@@ -1114,7 +1108,6 @@ class LS_CFLevels:
             #     print np.exp(-expvals/temps/k_B)[0]
             #     raise ValueError('Nan in result!')
             return np.nan_to_num(JexpValList.T)
-
 
     def susceptibility(self, Temps, Field, deltaField):
         '''Computes susceptibility numerically with a numerical derivative.
@@ -1280,9 +1273,6 @@ class LS_CFLevels:
             #     raise ValueError('Nan in result!')
             return np.nan_to_num(MagList.T) / muB
 
-
-
-
     def gtensor(self):
         '''Returns g tensor computed numerically'''
         def eliminateimag(number):
@@ -1377,7 +1367,6 @@ class LS_CFLevels:
 
          return gtens
 
-
     def fitdata(self, chisqfunc, fitargs, method='Powell', **kwargs):
         '''fits data to CEF parameters'''
 
@@ -1405,7 +1394,6 @@ class LS_CFLevels:
         #print '\nFinal values: ', result
         result['Chisq'] = finalChisq
         return result
-
 
     def printLaTexEigenvectors(self):
         '''prints eigenvectors and eigenvalues in the output that Latex can read'''
