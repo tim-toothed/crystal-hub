@@ -3,7 +3,7 @@
 import numpy as np
 from copy import deepcopy
 
-from lattice_class import lattice
+from edited_package.lattice_class import lattice
 
 
 class CifFile:

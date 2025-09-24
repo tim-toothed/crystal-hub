@@ -1,10 +1,10 @@
 import numpy as np
 from copy import deepcopy
 
-from cif_symmetry_import import FindPointGroupSymOps
-from cif_file import CifFile
-from constants import Jion, SpOrbCoup, TMradialI, HalfList, notHalfList
-from ligands import Ligands, LS_Ligands
+from edited_package.cif_symmetry_import import FindPointGroupSymOps
+from edited_package.cif_file import CifFile
+from edited_package.constants import Jion, SpOrbCoup, TMradialI, HalfList, notHalfList
+from edited_package.ligands import Ligands, LS_Ligands
 
 
 

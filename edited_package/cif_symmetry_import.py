@@ -1,6 +1,7 @@
 import numpy as np
-from plot_ligands import plotPCF
-from moments_of_inertia import findZaxis
+
+from edited_package.plot_ligands import plotPCF
+from edited_package.moments_of_inertia import findZaxis
 
 def FindPointGroupSymOps(self, ion, Zaxis = None, Yaxis = None, crystalImage = False, 
 						NumIonNeighbors = 3, CoordinationNumber=None, maxDistance = None):

@@ -1,14 +1,14 @@
 import numpy as np
 from scipy import optimize
 
-from lattice_class import lattice
-from plot_ligands import exportLigandCif
-from constants import TessHarm, theta, RadialIntegral, Constant, LStheta, PFalpha, PFbeta, RadialIntegral_TM, Jion
-from half_filled import IsHalfFilled
-from stevens_operators import StevensOp, LS_StevensOp
-from create_fit_function import makeFitFunction
-from cf_levels import CFLevels, LS_CFLevels
-from operators import LSOperator
+from edited_package.lattice_class import lattice
+from edited_package.plot_ligands import exportLigandCif
+from edited_package.constants import TessHarm, theta, RadialIntegral, Constant, LStheta, PFalpha, PFbeta, RadialIntegral_TM, Jion
+from edited_package.half_filled import IsHalfFilled
+from edited_package.stevens_operators import StevensOp, LS_StevensOp
+from edited_package.create_fit_function import makeFitFunction
+from edited_package.cf_levels import CFLevels, LS_CFLevels
+from edited_package.operators import LSOperator
 
 
 class Ligands:

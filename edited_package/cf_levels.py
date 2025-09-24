@@ -4,11 +4,11 @@ from scipy import optimize
 import scipy.linalg as LA
 from scipy.special import wofz
 
-from constants import Jion
-from form_factors import RE_FormFactor
-from create_fit_function import makeFitFunction
-from operators import Ket, Operator, LSOperator
-from stevens_operators import StevensOp, LS_StevensOp
+from edited_package.constants import Jion
+from edited_package.form_factors import RE_FormFactor
+from edited_package.create_fit_function import makeFitFunction
+from edited_package.operators import Ket, Operator, LSOperator
+from edited_package.stevens_operators import StevensOp, LS_StevensOp
 
 
 class CFLevels:

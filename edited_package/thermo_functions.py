@@ -1,5 +1,5 @@
 import numpy as np
-from constants import k_b
+from edited_package.constants import k_b
 
 # Heat capacity from Victor Porée
 def partition_func(Eis,T):
