@@ -5,9 +5,9 @@ from cf_levels import CFLevels, LS_CFLevels
 from ligands import Ligands, LS_Ligands 
 from import_CIF import importCIF
 
-from thermo_functions import partition_func, Cp_from_CEF # Не используется нигде
-from Wybourne_Stevens import WybourneToStevens, StevensToWybourne # Не используется нигде
-from rescale_CEF import rescaleCEF # Не используется нигде
+from thermo_functions import partition_func, Cp_from_CEF 
+from wybourne_stevens import WybourneToStevens, StevensToWybourne
+from rescale_CEF import rescaleCEF 
 
 
 print(' '+'*'*55 + '\n'+

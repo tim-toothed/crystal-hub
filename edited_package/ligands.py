@@ -1,15 +1,14 @@
 import numpy as np
-import pcf_lib.LatticeClass as lat
-from pcf_lib.plotLigands import exportLigandCif
-from pcf_lib.PointChargeConstants import TessHarm, theta, RadialIntegral, Constant, LStheta, IsHalfFilled, PFalpha, PFbeta, RadialIntegral_TM
-from pcf_lib.StevensOperators import StevensOp, LS_StevensOp
-from pcf_lib.CreateFitFunction import makeFitFunction
 from scipy import optimize
-from constants import Jion
+
+from lattice_class import lattice
+from plot_ligands import exportLigandCif
+from constants import TessHarm, theta, RadialIntegral, Constant, LStheta, PFalpha, PFbeta, RadialIntegral_TM, Jion
+from half_filled import IsHalfFilled
+from stevens_operators import StevensOp, LS_StevensOp
+from create_fit_function import makeFitFunction
 from cf_levels import CFLevels, LS_CFLevels
-from pcf_lib.Operators import LSOperator
-
-
+from operators import LSOperator
 
 
 class Ligands:
@@ -18,11 +17,11 @@ class Ligands:
         """Creates array of ligand bonds in cartesian coordinates"""
         lp = latticeParams
         if lp == None:
-            self.latt = lat.lattice(1,1,1,90,90,90)
+            self.latt = lattice(1,1,1,90,90,90)
         elif len(lp) != 6:
             raise LookupError("latticeParams needs to have 6 components: a,b,c,alpha,beta,gamma")
         else:
-            self.latt = lat.lattice(lp[0], lp[1], lp[2], lp[3], lp[4], lp[5])
+            self.latt = lattice(lp[0], lp[1], lp[2], lp[3], lp[4], lp[5])
 
         self.bonds = np.array([O - np.array(ionPos) for O in ligandPos])
         self.bonds = self.latt.cartesian(self.bonds).astype('float')
@@ -105,13 +104,6 @@ class Ligands:
             ionJ = Jion[ion][2]
         else: ionJ = ionL
 
-        # # print factors used:
-        # print "#---------------------------------------"
-        # print "# Stevens Factors \tRadial Integrals (a_0)"
-        # for n in range(2,8,2):
-        #     print ' ', theta(ion,n), '\t ', RadialIntegral(ion,n)
-        # print '#---------------------------------------\n'
-
         ahc = 1.43996e4  #Constant to get the energy in units of meV = alpha*hbar*c
         a0 = 0.52917721067    #Bohr radius in \AA
 
@@ -140,8 +132,7 @@ class Ligands:
                 OOO.append(StevensOp(ionJ,n,m))
                 nonzeroB.append(B)
                 bnm_labels.append('B_{}^{}'.format(n,m))
-            #print cef.StevensOp(ionJ,n,m)
-            #self.H += np.around(B,decimals=15)*StevensOp(ionJ,n,m)
+
             if np.around(B,decimals=9) != 0:
                 self.H += B*StevensOp(ionJ,n,m)
             self.B.append(B)
@@ -169,7 +160,6 @@ class Ligands:
         print('\tFitting...')
         ############## Fit, using error function  #####################
         p_best = optimize.minimize(fun, p0, method=method)
-        #p_best = optimize.minimize(fun, p0, method='Nelder-Mead')
         ###############################################################
 
         try:
@@ -215,11 +205,11 @@ class LS_Ligands:
         For example, it could be 'Ni3+', or ['Ni3+', 0.5, 1]"""
         lp = latticeParams
         if lp == None:
-            self.latt = lat.lattice(1,1,1,90,90,90)
+            self.latt = lattice(1,1,1,90,90,90)
         elif len(lp) != 6:
             raise LookupError("latticeParams needs to have 6 components: a,b,c,alpha,beta,gamma")
         else:
-            self.latt = lat.lattice(lp[0], lp[1], lp[2], lp[3], lp[4], lp[5])
+            self.latt = lattice(lp[0], lp[1], lp[2], lp[3], lp[4], lp[5])
 
         self.bonds = np.array([np.array(O) - np.array(ionPos) for O in ligandPos])
         self.bonds = self.latt.cartesian(self.bonds).astype('float')
@@ -298,16 +288,7 @@ class LS_Ligands:
         except AttributeError:
             self.suppressmm = suppressminusm
 
-        # if symequiv == None:
-        #     charge = IonCharge*[LigandCharge]*len(self.bonds)
-        # else:
-        #     charge = [0]*len(self.bonds)
-        #     for i,se in enumerate(symequiv):
-        #         charge[i] = IonCharge*LigandCharge[se]
-        # self.symequiv = symequiv
-
         if symequiv == None:
-            # charge = IonCharge*[LigandCharge]*len(self.bonds)
             try:
                 if len(LigandCharge) == len(self.bonds):
                     charge = LigandCharge
@@ -319,19 +300,9 @@ class LS_Ligands:
         else:
             charge = [0]*len(self.bonds)
             for i,se in enumerate(symequiv):
-                #charge[i] = IonCharge*LigandCharge[se]
                 charge[i] = LigandCharge[se]
         
         ion=self.ion
-        # ionS = Jion[ion][0]
-        # ionL = Jion[ion][1]
-
-        # # print factors used:
-        # print "#---------------------------------------"
-        # print "# Stevens Factors \tRadial Integrals (a_0)"
-        # for n in range(2,8,2):
-        #     print ' ', theta(ion,n), '\t ', RadialIntegral(ion,n)
-        # print '#---------------------------------------\n'
 
         ahc = 1.43996e4  #Constant to get the energy in units of meV = alpha*hbar*c
         a0 = 0.52917721067    #Bohr radius in \AA
@@ -344,7 +315,6 @@ class LS_Ligands:
         self.H_nocharge = [[]]
         if self.suppressmm == False:  nmrange = [[n,m] for n in range(2,8,2) for m in range(-n,n+1)]
         elif self.suppressmm == True:   nmrange = [[n,m] for n in range(2,8,2) for m in range(0,n+1)]
-        #for n,m in [[n,m] for n in range(2,8,2) for m in range(-n,n+1)]:
         for n,m in nmrange:
             # 1)  Compute gamma
             gamma = 0
@@ -360,7 +330,6 @@ class LS_Ligands:
             if np.around(B,decimals=8) != 0:
                 OOO.append(LS_StevensOp(self.ionL,self.ionS,n,m))
                 nonzeroB.append(B)
-            #print cef.StevensOp(ionJ,n,m)
             if np.around(B,decimals=10) != 0:
                 H += B*StevensOp(self.ionL,n,m)
             self.B.append(B)
@@ -370,8 +339,6 @@ class LS_Ligands:
         H_CEF_O = np.hstack(np.hstack(np.multiply.outer(H, np.identity(int(2*self.ionS+1)))))
         self.H_CEF = LSOperator(self.ionL, self.ionS)
         self.H_CEF.O = H_CEF_O
-
-        #self.H = self.H_CEF + self.H_LS
 
         newobj = LS_CFLevels.Hamiltonian(self.H_CEF, self.H_SOC, self.ionL, self.ionS)
         newobj.O = OOO
@@ -395,7 +362,6 @@ class LS_Ligands:
 
 
         if symequiv == None:
-            # charge = IonCharge*[LigandCharge]*len(self.bonds)
             try:
                 if len(LigandCharge) == len(self.bonds):
                     charge = LigandCharge
@@ -407,7 +373,6 @@ class LS_Ligands:
         else:
             charge = [0]*len(self.bonds)
             for i,se in enumerate(symequiv):
-                #charge[i] = IonCharge*LigandCharge[se]
                 charge[i] = LigandCharge[se]
 
 
@@ -426,7 +391,6 @@ class LS_Ligands:
         self.H_nocharge = [[]]
         if self.suppressmm == False:  nmrange = [[n,m] for n in range(2,6,2) for m in range(-n,n+1)]
         elif self.suppressmm == True:   nmrange = [[n,m] for n in range(2,6,2) for m in range(0,n+1)]
-        #for n,m in [[n,m] for n in range(2,8,2) for m in range(-n,n+1)]:
         for n,m in nmrange:
             # 1)  Compute gamma
             gamma = 0
@@ -442,7 +406,6 @@ class LS_Ligands:
             if np.around(B,decimals=8) != 0:
                 OOO.append(LS_StevensOp(self.ionL,self.ionS,n,m))
                 nonzeroB.append(B)
-            #print cef.StevensOp(ionJ,n,m)
             if np.around(B,decimals=10) != 0:
                 H += B*StevensOp(self.ionL,n,m)
             self.B.append(B)
@@ -476,7 +439,6 @@ class LS_Ligands:
             self.suppressmm = suppressminusm
 
         if symequiv == None:
-            # charge = IonCharge*[LigandCharge]*len(self.bonds)
             try:
                 if len(LigandCharge) == len(self.bonds):
                     charge = LigandCharge
@@ -488,7 +450,6 @@ class LS_Ligands:
         else:
             charge = [0]*len(self.bonds)
             for i,se in enumerate(symequiv):
-                #charge[i] = IonCharge*LigandCharge[se]
                 charge[i] = LigandCharge[se]
 
 
@@ -506,7 +467,6 @@ class LS_Ligands:
         self.H_nocharge = [[]]
         if self.suppressmm == False:  nmrange = [[n,m] for n in range(2,6,2) for m in range(-n,n+1)]
         elif self.suppressmm == True:   nmrange = [[n,m] for n in range(2,6,2) for m in range(0,n+1)]
-        #for n,m in [[n,m] for n in range(2,8,2) for m in range(-n,n+1)]:
         for n,m in nmrange:
             # 1)  Compute gamma
             gamma = 0
@@ -522,7 +482,6 @@ class LS_Ligands:
             if np.around(B,decimals=8) != 0:
                 OOO.append(LS_StevensOp(self.ionL,self.ionS,n,m))
                 nonzeroB.append(B)
-            #print cef.StevensOp(ionJ,n,m)
             if np.around(B,decimals=10) != 0:
                 H += B*StevensOp(self.ionL,n,m)
             self.B.append(B)
@@ -533,7 +492,6 @@ class LS_Ligands:
         self.H_CEF = LSOperator(self.ionL, self.ionS)
         self.H_CEF.O = H_CEF_O
 
-        #self.H = self.H_CEF + self.H_LS
         newobj = LS_CFLevels.Hamiltonian(self.H_CEF, self.H_SOC, self.ionL, self.ionS)
         newobj.O = OOO
         newobj.B = nonzeroB
@@ -549,7 +507,6 @@ class LS_Ligands:
         print('\tFitting...')
         ############## Fit, using error function  #####################
         p_best = optimize.minimize(fun, p0, method=method)
-        #p_best = optimize.minimize(fun, p0, method='Nelder-Mead')
         ###############################################################
 
         initialChisq, finalChisq = fun(p0), fun(p_best.x)

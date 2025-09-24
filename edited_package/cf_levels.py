@@ -1,14 +1,15 @@
 import numpy as np
-from constants import Jion
-import numpy as np
+from numba import jitclass, float64
 from scipy import optimize
 import scipy.linalg as LA
 from scipy.special import wofz
-from pcf_lib.form_factors import RE_FormFactor
-from pcf_lib.CreateFitFunction import makeFitFunction
-from pcf_lib.Operators import Ket, Operator, LSOperator
-from pcf_lib.StevensOperators import StevensOp, LS_StevensOp
-from numba import jitclass, float64
+
+from constants import Jion
+from form_factors import RE_FormFactor
+from create_fit_function import makeFitFunction
+from operators import Ket, Operator, LSOperator
+from stevens_operators import StevensOp, LS_StevensOp
+
 
 class CFLevels:
     """For calculating and fitting crystal field levels for an ion"""
@@ -58,7 +59,6 @@ class CFLevels:
         newcls.opttran = OpticalTransition(Operator.Jx(newcls.J).O.real, Operator.Jy(newcls.J).O.imag, Operator.Jz(newcls.J).O.real)
         return newcls
 
-
     def newCoeff(self, newcoeff):
         self.B = np.array(newcoeff)
         newH = np.sum([a*b for a,b in zip(self.O, newcoeff)], axis=0)
@@ -84,7 +84,6 @@ class CFLevels:
         tol = 1e-15
         self.eigenvalues[abs(self.eigenvalues) < tol] = 0.0
         self.eigenvectors[abs(self.eigenvectors) < tol] = 0.0
-
 
     def diagonalize_banded(self, Hamiltonian=None):
         '''same as above, but using the Scipy eig_banded function'''
@@ -117,9 +116,6 @@ class CFLevels:
                 nonzerobands = i
         return diags[:nonzerobands+1]
 
-
-
-
     def transitionIntensity(self, ii, jj, Temp):
         # for population factor weights
         beta = 1/(8.61733e-2*Temp)  # Boltzmann constant is in meV/K
@@ -130,7 +126,6 @@ class CFLevels:
         # compute amplitude
         mJn = self.opttran.transition(self.eigenvectors.real[ii] ,  self.eigenvectors.real[jj])
         return pn*mJn
-
 
     def neutronSpectrum(self, Earray, Temp, Ei, ResFunc, gamma = 0):
         # make angular momentum ket object
@@ -174,7 +169,6 @@ class CFLevels:
         kpoverk = np.sqrt((Ei - Earray)/Ei) #k'/k = sqrt(E'/E)
         return intensity * kpoverk
 
-
     def neutronSpectrum_customLineshape(self, Earray, Temp, Ei, LineshapeFunc):
         '''calculate neutron spectrum with a custom lineshape
         which is a function of energy list and energy transfer.'''
@@ -208,7 +202,6 @@ class CFLevels:
         kpoverk = np.sqrt((Ei - Earray)/Ei) #k'/k = sqrt(E'/E)
         return intensity * kpoverk
 
-
     def normalizedNeutronSpectrum(self, Earray, Temp, ResFunc, gamma = 0):
         '''1D neutron spectrum without the Kf/Ki correction'''
         # make angular momentum ket object
@@ -239,7 +232,6 @@ class CFLevels:
                                                         gamma=gamma)).real).astype('float64')
         return intensity
 
-
     def normalizedNeutronSpectrum_customLineshape(self, Earray, Temp, LineshapeFunc):
         '''1D neutron spectrum without the Kf/Ki correction.
         LineshapeFunc must be a function with arguments of energy list and 
@@ -269,8 +261,6 @@ class CFLevels:
                                                             deltaE)).real).astype('float64')
         return intensity
 
-
-
     def neutronSpectrum2D(self, Earray, Qarray, Temp, Ei, ResFunc, gamma, Ion, DebyeWaller=0):
         intensity1D = self.neutronSpectrum(Earray, Temp, Ei, ResFunc,  gamma)
 
@@ -288,7 +278,6 @@ class CFLevels:
         # Scale by form factor
         FormFactor = RE_FormFactor(Qarray,Ion)
         return np.outer(intensity1D, DWF*FormFactor)
-
 
     def _transition(self,ket1,ket2):  ## Correct, but slow.
         """Computes \sum_a |<|J_a|>|^2"""
@@ -391,7 +380,6 @@ class CFLevels:
             print('  <J_x> =',jjxx,'\t<J_y> =',jjyy,'\t<J_z> =',jjzz)
         print(' ')
 
-
     def magnetization(self, ion, Temp, Field):
         '''field should be a 3-component vector. Temps may be an array.
         Returns a three-component vector [M_x, M_y, M_z].
@@ -453,7 +441,6 @@ class CFLevels:
             #     print np.exp(-expvals/temps/k_B)[0]
             #     raise ValueError('Nan in result!')
             return np.nan_to_num(gJ*JexpValList.T)
-
 
     def susceptibility(self, ion, Temps, Field, deltaField):
         '''Computes susceptibility numerically with a numerical derivative.
@@ -545,7 +532,6 @@ class CFLevels:
                                     np.real((kev2*kev.Jz()) * (kev*kev2.Jz()))])
         return gJ*gJ*muB*suscept
 
-
     def gtensor(self):
         '''Returns g tensor computed numerically'''
 
@@ -601,7 +587,6 @@ class CFLevels:
                          [np.real(jz01), np.imag(jz01), np.abs(jz00)]])
         return gg*LandeGFactor(self.ion)
 
-
     def gtensorzeeman(self, field=0.1, Temp=0.1):
          '''Returns g tensor computed numerically from zeeman splitting'''
          Jx = Operator.Jx(self.J)
@@ -648,7 +633,6 @@ class CFLevels:
             
          return gg
 
-
     def fitdata(self, chisqfunc, fitargs, method='Powell', **kwargs):
         '''fits data to CEF parameters'''
 
@@ -692,7 +676,6 @@ class CFLevels:
         #print '\nFinal values: ', result
         result['Chisq'] = finalChisq
         return result
-
 
     def testEigenvectors(self):
         """Tests if eigenvectors are really eigenvectors"""

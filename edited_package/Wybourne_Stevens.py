@@ -1,5 +1,4 @@
-from constants import LambdaConstants
-from pcf_lib.PointChargeConstants import LStheta, theta
+from constants import LambdaConstants, LStheta, theta
 
 def WybourneToStevens(ion, Bdict, LS=False):
     StevDict = {}
