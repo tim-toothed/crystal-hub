@@ -3,7 +3,7 @@ from copy import deepcopy
 
 from edited_package.cif_symmetry_import import FindPointGroupSymOps
 from edited_package.cif_file import CifFile
-from edited_package.constants import Jion, SpOrbCoup, TMradialI, HalfList, notHalfList
+from edited_package.constants import ION_NUMS_RARE_EARTH, SPIN_ORBIT_COUPLING_CONSTANTS, RADIAL_INTEGRALS_TRANS_METAL, ION_HALF_FILLED, ION_NOT_HALF_FILLED
 from edited_package.ligands import Ligands, LS_Ligands
 
 
@@ -68,7 +68,7 @@ def importCIF(ciffile, mag_ion = None, Zaxis = None, Yaxis = None, LS_Coupling =
                                                                     Yaxis, crystalImage,NumIonNeighbors,
                                                                     CoordinationNumber, MaxDistance)
         #print(ligandNames)
-        if centralIon in Jion: # It's a rare earth ion
+        if centralIon in ION_NUMS_RARE_EARTH: # It's a rare earth ion
             if LS_Coupling:
                 Lig = LS_Ligands(ion=centralIon, ionPos = [0,0,0], ligandPos = ligandPositions, 
                             SpinOrbitCoupling=LS_Coupling)
@@ -91,11 +91,11 @@ def importCIF(ciffile, mag_ion = None, Zaxis = None, Yaxis = None, LS_Coupling =
                 Lig = LS_Ligands(ion=[centralIon, ionS, ionL], ionPos = [0,0,0], 
                         ligandPos = ligandPositions,  SpinOrbitCoupling=LS_Coupling)
             else: # Look up SOC in a table
-                print('    No SOC provided, assuming SOC =', np.around(SpOrbCoup[centralIon],2), 'meV for '+
+                print('    No SOC provided, assuming SOC =', np.around(SPIN_ORBIT_COUPLING_CONSTANTS[centralIon],2), 'meV for '+
                        centralIon +"\n           (if you'd like to adjust this, use the 'LS_Coupling' command).\n")
                 
                 Lig = LS_Ligands(ion=[centralIon, ionS, ionL], ionPos = [0,0,0], 
-                        ligandPos = ligandPositions,  SpinOrbitCoupling=SpOrbCoup[centralIon])
+                        ligandPos = ligandPositions,  SpinOrbitCoupling=SPIN_ORBIT_COUPLING_CONSTANTS[centralIon])
 
             if ForceImaginary:
                 PCM = Lig.TMPointChargeModel(printB = True, LigandCharge=ligandCharge, suppressminusm = False)
@@ -116,9 +116,9 @@ def importCIF(ciffile, mag_ion = None, Zaxis = None, Yaxis = None, LS_Coupling =
         return output
 
 def checkTMexist(ion):
-    if ion not in TMradialI:
+    if ion not in RADIAL_INTEGRALS_TRANS_METAL:
         print(ion,'radial integrals are not known by PyCrystalField.')
-    if ion not in SpOrbCoup:
+    if ion not in SPIN_ORBIT_COUPLING_CONSTANTS:
         print(ion,'spin orbit coupling constant is not known by PyCrystalField, but can be specified with `LS_Coupling`.')
-    if ion not in HalfList and ion not in notHalfList:
+    if ion not in ION_HALF_FILLED and ion not in ION_NOT_HALF_FILLED:
         print(ion,'shell filling not known by PyCrystalField.')

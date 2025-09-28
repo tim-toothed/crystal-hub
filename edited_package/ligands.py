@@ -3,7 +3,7 @@ from scipy import optimize
 
 from edited_package.lattice_class import lattice
 from edited_package.plot_ligands import exportLigandCif
-from edited_package.constants import TessHarm, theta, RadialIntegral, Constant, LStheta, PFalpha, PFbeta, RadialIntegral_TM, Jion
+from edited_package.constants import calculate_tesseral_harmonic, theta, calculate_radial_integral_RE, Constant, LStheta, PFalpha, PFbeta, calculate_radial_integral_TM, ION_NUMS_RARE_EARTH
 from edited_package.half_filled import IsHalfFilled
 from edited_package.stevens_operators import StevensOp, LS_StevensOp
 from edited_package.create_fit_function import makeFitFunction
@@ -101,7 +101,7 @@ class Ligands:
         
         ion=self.ion
         if ionL == None:
-            ionJ = Jion[ion][2]
+            ionJ = ION_NUMS_RARE_EARTH[ion][2]
         else: ionJ = ionL
 
         ahc = 1.43996e4  #Constant to get the energy in units of meV = alpha*hbar*c
@@ -122,11 +122,11 @@ class Ligands:
             for i in range(len(self.bonds)):
                 #print(np.squeeze(charge[i]))
                 gamma += 4*np.pi/(2*n+1)*np.squeeze(charge[i]) *\
-                            TessHarm(n,m, self.bonds[i][0], self.bonds[i][1], self.bonds[i][2])/\
+                            calculate_tesseral_harmonic(n,m, self.bonds[i][0], self.bonds[i][1], self.bonds[i][2])/\
                             (self.bondlen[i]**(n+1))
 
             # 2)  Compute CEF parameter
-            B = -gamma * ahc* a0**n * Constant(n,m) * RadialIntegral(ion,n) * theta(ion,n)
+            B = -gamma * ahc* a0**n * Constant(n,m) * calculate_radial_integral_RE(ion,n) * theta(ion,n)
             if printB ==True: print('B_'+str(n),m,' = ',np.around(B,decimals=8))
             if np.around(B,decimals=7) != 0:
                 OOO.append(StevensOp(ionJ,n,m))
@@ -217,8 +217,8 @@ class LS_Ligands:
 
         if isinstance(ion, str):
             self.ion = ion
-            self.ionS = Jion[ion][0]
-            self.ionL = Jion[ion][1]
+            self.ionS = ION_NUMS_RARE_EARTH[ion][0]
+            self.ionL = ION_NUMS_RARE_EARTH[ion][1]
         else:
             self.ion = ion[0]
             self.ionS = ion[1]
@@ -321,11 +321,11 @@ class LS_Ligands:
             for i in range(len(self.bonds)):
 
                 gamma += 4*np.pi/(2*n+1)*charge[i] *\
-                            TessHarm(n,m, self.bonds[i][0], self.bonds[i][1], self.bonds[i][2])/\
+                            calculate_tesseral_harmonic(n,m, self.bonds[i][0], self.bonds[i][1], self.bonds[i][2])/\
                             (self.bondlen[i]**(n+1))
 
             # 2)  Compute CEF parameter
-            B = -gamma * ahc* a0**n * Constant(n,m) * RadialIntegral(ion,n) * LStheta(ion,n)
+            B = -gamma * ahc* a0**n * Constant(n,m) * calculate_radial_integral_RE(ion,n) * LStheta(ion,n)
             if printB ==True: print('B_'+str(n),m,' = ',np.around(B,decimals=8))
             if np.around(B,decimals=8) != 0:
                 OOO.append(LS_StevensOp(self.ionL,self.ionS,n,m))
@@ -397,11 +397,11 @@ class LS_Ligands:
             for i in range(len(self.bonds)):
 
                 gamma += 4*np.pi/(2*n+1)*charge[i] *\
-                            TessHarm(n,m, self.bonds[i][0], self.bonds[i][1], self.bonds[i][2])/\
+                            calculate_tesseral_harmonic(n,m, self.bonds[i][0], self.bonds[i][1], self.bonds[i][2])/\
                             (self.bondlen[i]**(n+1))
 
             # 2)  Compute CEF parameter
-            B = -gamma * ahc* a0**n * Constant(n,m) * RadialIntegral_TM(self.ion, n) * TM_LStheta[n]
+            B = -gamma * ahc* a0**n * Constant(n,m) * calculate_radial_integral_TM(self.ion, n) * TM_LStheta[n]
             if printB ==True: print('B_'+str(n),m,' = ',np.around(B,decimals=8))
             if np.around(B,decimals=8) != 0:
                 OOO.append(LS_StevensOp(self.ionL,self.ionS,n,m))
@@ -473,7 +473,7 @@ class LS_Ligands:
             for i in range(len(self.bonds)):
 
                 gamma += 4*np.pi/(2*n+1)*charge[i] *\
-                            TessHarm(n,m, self.bonds[i][0], self.bonds[i][1], self.bonds[i][2])/\
+                            calculate_tesseral_harmonic(n,m, self.bonds[i][0], self.bonds[i][1], self.bonds[i][2])/\
                             (self.bondlen[i]**(n+1))
 
             # 2)  Compute CEF parameter

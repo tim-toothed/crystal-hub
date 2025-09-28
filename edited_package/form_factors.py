@@ -1,5 +1,5 @@
 import numpy as np
-from constants import Jion
+from constants import ION_NUMS_RARE_EARTH
 
 def importRE_FF(ion):
     coefs = [[],[]]
@@ -24,7 +24,7 @@ def RE_FormFactor(magQ,ion):
     j2 = s**2*(coefs2[0]*np.exp(-coefs2[1]*s**2) + coefs2[2]*np.exp(-coefs2[3]*s**2)+\
                coefs2[4]*np.exp(-coefs2[5]*s**2) + coefs2[6])
 
-    S, L, J = Jion[ion]
+    S, L, J = ION_NUMS_RARE_EARTH[ion]
      
     j2factor = (J*(J+1.) - S*(S+1.) + L*(L+1.))/(3.*J*(J+1.) + S*(S+1.) - L*(L+1.))
     return (j0 + j2*j2factor)**2

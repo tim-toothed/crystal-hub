@@ -1,5 +1,7 @@
-import numpy as np
 from typing import Union, Dict
+
+import numpy as np
+
 
 #######################
 # Free-Ion State Data
@@ -14,7 +16,7 @@ from typing import Union, Dict
 # j = total angular momentum quantum number
 
 # Transition metals with [S, L] values
-JionTM = {
+ION_NUMS_TRANS_METAL = {
     'Ag2+': [1/2, 2], 'Ag3+': [1, 3],
     'Cd3+': [1/2, 2],
     'Co2+': [3/2, 3], 'Co3+': [2, 2], 'Co6+': [3/2, 3],
@@ -40,7 +42,7 @@ JionTM = {
 }
 
 # Rare Earths with [S, L, J] values
-Jion = {
+ION_NUMS_RARE_EARTH = {
     'Ce3+': [0.5, 3., 2.5], 'Pr3+': [1., 5., 4.], 'Nd3+': [1.5, 6., 4.5],
     'Pm3+': [2., 6., 4.], 'Sm3+': [2.5, 5, 2.5], 'Eu3+': [3, 3, 0],
     'Gd3+': [7/2, 0, 7/2],
@@ -54,7 +56,7 @@ Jion = {
 # Constants for converting between Wybourne and Stevens Operators
 #######################
 
-LambdaConstants = {
+WYBOURNE_STEVENS_CONSTS = {
     2: {0: 1/2, 1: np.sqrt(6), 2: np.sqrt(6)/2},
     4: {0: 1/8, 1: np.sqrt(5)/2, 2: np.sqrt(10)/4, 3: np.sqrt(35)/2, 4: np.sqrt(70)/8},
     6: {0: 1/16, 1: np.sqrt(42)/8, 2: np.sqrt(105)/16, 3: np.sqrt(105)/8,
@@ -94,12 +96,13 @@ TESSERAL_CONSTANTS: Dict[int, Dict[int, float]] = {
         6: 0.683184105191914}
 }
 
+# <- ХУЙНЯ ФУНКЦИЯ - УБРАТЬ, ПЕРЕДЕЛАТЬ, СЖЕЧЬ
 def Constant(n: int, m: int) -> float:
     """Returns the constant in front of the tesseral harmonic."""
     return TESSERAL_CONSTANTS[n][m]
 
-# Alternative approach using function dispatch instead of massive elif chain
-def TessHarm(n: int, m: int, x: Union[float, np.ndarray], 
+# Function for "Calculate tesseral harmonic function values."
+def calculate_tesseral_harmonic(n: int, m: int, x: Union[float, np.ndarray], 
              y: Union[float, np.ndarray], z: Union[float, np.ndarray]) -> Union[float, np.ndarray]:
     """
     Calculate tesseral harmonic function values.
@@ -110,78 +113,78 @@ def TessHarm(n: int, m: int, x: Union[float, np.ndarray],
     r_cubed = r**3
     r_4 = r**4
     r_6 = r**6
+
+    def _tesseral_dispatch(n: int, m: int, x: float, y: float, z: float, 
+                           r: float, r_sq: float, r_cubed: float, r_4: float, r_6: float) -> float:
+        """Dispatch to the appropriate tesseral harmonic calculation."""
+        if n == 0 and m == 0:
+            return 1.0
+        
+        elif n == 1:
+            if m == 1: return x / r
+            elif m == 0: return z / r
+            elif m == -1: return y / r
+        
+        elif n == 2:
+            if m == -2: return 2 * x * y / r_sq
+            elif m == -1: return y * z / r_sq
+            elif m == 0: return (3 * z**2 - r_sq) / r_sq
+            elif m == 1: return x * z / r_sq
+            elif m == 2: return (x**2 - y**2) / r_sq
+        
+        elif n == 3:
+            if m == -3: return (3 * x**2 * y - y**3) / r_cubed
+            elif m == -2: return (2 * x * y * z) / r_cubed
+            elif m == -1: return y * (5 * z**2 - r_sq) / r_cubed
+            elif m == 0: return z * (5 * z**2 - 3 * r_sq) / r_cubed
+            elif m == 1: return x * (5 * z**2 - r_sq) / r_cubed
+            elif m == 2: return z * (x**2 - y**2) / r_cubed
+            elif m == 3: return (x**3 - 3 * x * y**2) / r_cubed
+        
+        elif n == 4:
+            if m == -4: return 4 * (x**3 * y - x * y**3) / r_4
+            elif m == -3: return (3 * x**2 * y - y**3) * z / r_4
+            elif m == -2: return 2 * x * y * (7 * z**2 - r_sq) / r_4
+            elif m == -1: return y * z * (7 * z**2 - 3 * r_sq) / r_4
+            elif m == 0: return (35 * z**4 - 30 * z**2 * r_sq + 3 * r_4) / r_4
+            elif m == 1: return x * z * (7 * z**2 - 3 * r_sq) / r_4
+            elif m == 2: return (x**2 - y**2) * (7 * z**2 - r_sq) / r_4
+            elif m == 3: return (x**3 - 3 * x * y**2) * z / r_4
+            elif m == 4: return (x**4 - 6 * x**2 * y**2 + y**4) / r_4
+        
+        elif n == 5:
+            return 0.0  # Skipping n=5 as per original comment
+        
+        elif n == 6:
+            if m == -6: return (6 * x**5 * y - 20 * x**3 * y**3 + 6 * x * y**5) / r_6
+            elif m == -5: return (5 * x**4 * y - 10 * x**2 * y**3 + y**5) * z / r_6
+            elif m == -4: return 4 * (x**3 * y - x * y**3) * (11 * z**2 - r_sq) / r_6
+            elif m == -3: return (3 * x**2 * y - y**3) * (11 * z**3 - 3 * z * r_sq) / r_6
+            elif m == -2: return 2 * x * y * (33 * z**4 - 18 * z**2 * r_sq + r_4) / r_6
+            elif m == -1: return y * z * (33 * z**4 - 30 * z**2 * r_sq + 5 * r_4) / r_6
+            elif m == 0: return (231 * z**6 - 315 * z**4 * r_sq + 105 * z**2 * r_4 - 5 * r**6) / r_6
+            elif m == 1: return x * z * (33 * z**4 - 30 * z**2 * r_sq + 5 * r_4) / r_6
+            elif m == 2: return (x**2 - y**2) * (33 * z**4 - 18 * z**2 * r_sq + r_4) / r_6
+            elif m == 3: return (x**3 - 3 * x * y**2) * (11 * z**3 - 3 * z * r_sq) / r_6
+            elif m == 4: return (x**4 - 6 * x**2 * y**2 + y**4) * (11 * z**2 - r_sq) / r_6
+            elif m == 5: return (x**5 - 10 * x**3 * y**2 + 5 * x * y**4) * z / r_6
+            elif m == 6: return (x**6 - 15. * x**4 * y**2 + 15. * x**2 * y**4 - y**6) / r_6
+        
+        raise ValueError(f"Tesseral harmonic not implemented for n={n}, m={m}")
     
     # Use a dispatch pattern based on (n, m) tuple
-    value = _tesseral_dispatch(n, m, x, y, z, r, r_sq, r_cubed, r_4, r_6)
+    value = _tesseral_dispatch(n, m, x, y, z, r, r_sq, r_cubed, r_4, r_6) 
     
+    from . import TESSERAL_CONSTANTS # <- короче так будет, я хз как по-умному
+
     return TESSERAL_CONSTANTS[n][m] * value
-
-
-def _tesseral_dispatch(n: int, m: int, x: float, y: float, z: float, 
-                       r: float, r_sq: float, r_cubed: float, r_4: float, r_6: float) -> float:
-    """Dispatch to the appropriate tesseral harmonic calculation."""
-    if n == 0 and m == 0:
-        return 1.0
-    
-    elif n == 1:
-        if m == 1: return x / r
-        elif m == 0: return z / r
-        elif m == -1: return y / r
-    
-    elif n == 2:
-        if m == -2: return 2 * x * y / r_sq
-        elif m == -1: return y * z / r_sq
-        elif m == 0: return (3 * z**2 - r_sq) / r_sq
-        elif m == 1: return x * z / r_sq
-        elif m == 2: return (x**2 - y**2) / r_sq
-    
-    elif n == 3:
-        if m == -3: return (3 * x**2 * y - y**3) / r_cubed
-        elif m == -2: return (2 * x * y * z) / r_cubed
-        elif m == -1: return y * (5 * z**2 - r_sq) / r_cubed
-        elif m == 0: return z * (5 * z**2 - 3 * r_sq) / r_cubed
-        elif m == 1: return x * (5 * z**2 - r_sq) / r_cubed
-        elif m == 2: return z * (x**2 - y**2) / r_cubed
-        elif m == 3: return (x**3 - 3 * x * y**2) / r_cubed
-    
-    elif n == 4:
-        if m == -4: return 4 * (x**3 * y - x * y**3) / r_4
-        elif m == -3: return (3 * x**2 * y - y**3) * z / r_4
-        elif m == -2: return 2 * x * y * (7 * z**2 - r_sq) / r_4
-        elif m == -1: return y * z * (7 * z**2 - 3 * r_sq) / r_4
-        elif m == 0: return (35 * z**4 - 30 * z**2 * r_sq + 3 * r_4) / r_4
-        elif m == 1: return x * z * (7 * z**2 - 3 * r_sq) / r_4
-        elif m == 2: return (x**2 - y**2) * (7 * z**2 - r_sq) / r_4
-        elif m == 3: return (x**3 - 3 * x * y**2) * z / r_4
-        elif m == 4: return (x**4 - 6 * x**2 * y**2 + y**4) / r_4
-    
-    elif n == 5:
-        return 0.0  # Skipping n=5 as per original comment
-    
-    elif n == 6:
-        if m == -6: return (6 * x**5 * y - 20 * x**3 * y**3 + 6 * x * y**5) / r_6
-        elif m == -5: return (5 * x**4 * y - 10 * x**2 * y**3 + y**5) * z / r_6
-        elif m == -4: return 4 * (x**3 * y - x * y**3) * (11 * z**2 - r_sq) / r_6
-        elif m == -3: return (3 * x**2 * y - y**3) * (11 * z**3 - 3 * z * r_sq) / r_6
-        elif m == -2: return 2 * x * y * (33 * z**4 - 18 * z**2 * r_sq + r_4) / r_6
-        elif m == -1: return y * z * (33 * z**4 - 30 * z**2 * r_sq + 5 * r_4) / r_6
-        elif m == 0: return (231 * z**6 - 315 * z**4 * r_sq + 105 * z**2 * r_4 - 5 * r**6) / r_6
-        elif m == 1: return x * z * (33 * z**4 - 30 * z**2 * r_sq + 5 * r_4) / r_6
-        elif m == 2: return (x**2 - y**2) * (33 * z**4 - 18 * z**2 * r_sq + r_4) / r_6
-        elif m == 3: return (x**3 - 3 * x * y**2) * (11 * z**3 - 3 * z * r_sq) / r_6
-        elif m == 4: return (x**4 - 6 * x**2 * y**2 + y**4) * (11 * z**2 - r_sq) / r_6
-        elif m == 5: return (x**5 - 10 * x**3 * y**2 + 5 * x * y**4) * z / r_6
-        elif m == 6: return (x**6 - 15. * x**4 * y**2 + 15. * x**2 * y**4 - y**6) / r_6
-    
-    raise ValueError(f"Tesseral harmonic not implemented for n={n}, m={m}")
-
 
 
 ######################
 # Multiplicative factor from Hutchings, Table VII
 ######################
 
-# This functions are not used in any package files
+# This functions are not used in any package files <- по идее это можно нахуй убрать, либо наоборот убрать дикты ниже
 
 def PFalpha(L: float, S: float, l: float, halffilled: bool = True) -> float:
     """
@@ -284,7 +287,7 @@ def PFgamma(L: float, nvalence: int) -> float:
 # The following lookup table was generated from the functions above.
 # This was done to save time in computation steps.
 
-def LStheta(ion,n):
+def LStheta(ion,n): # <- не дает ли неточностей эти консты с 13 знаками после запятой??
     LSThet = {}
     LSThet['Sm3+'] = [0.0148148148148, 0.0003848003848, -2.46666913334e-05]
     LSThet['Pm3+'] = [0.0040404040404, 0.000122436486073, 1.12121324243e-05]
@@ -299,14 +302,14 @@ def LStheta(ion,n):
     LSThet['Tb3+'] = [-0.0444444444444, 0.0040404040404, -0.001036001036]
     LSThet['Yb3+'] = [0.0444444444444, -0.0040404040404, 0.001036001036]
     if isinstance(ion, str):
-        return LSThet[ion][int(n/2-1)]
+        return LSThet[ion][int(n/2-1)] # <- почему нельзя было сразу посчитать?
 
 
 # Multiplicative factor for rare earth ground state multiplet
 # from Hutchings, Table VI
  # Cross-checked by hand with calculator.
 
-def theta(ion,n):
+def theta(ion,n): # <- здесь я вообще хз искренне
     Thet = {}
     Thet['Ce3+'] = [-2./(5*7), 2./(3*3*5*7), 0]
     Thet['Pr3+'] = [-2.*2*13/(3*3*5*5*11), -2.*2/(3*3*5*11*11), 2.**4*17/(3**4*5*7*11**2*13)]
@@ -334,6 +337,7 @@ def theta(ion,n):
 # - Fe3+, Mn2+, and Ru3+ from https://arxiv.org/pdf/cond-mat/0505214.pdf
 # - W6+ from https://doi.org/10.1016/0166-1280(95)04297-0
 
+# <- тоже как бы нахуй не надо, вообще можно оставить только SPIN_ORBIT_COUPLING_CONSTANTS, опять вычисления показывает
 SPIN_ORBIT_COUPLING_CM = {
     'Ti2+': 121,
     'Ti3+': 154,
@@ -410,10 +414,10 @@ SPIN_ORBIT_COUPLING_CM = {
 #HC_CONVERSION = 1.23984193e-1  # meV*cm conversion factor
 
 # Convert to meV and create the final dictionary
-#SpOrbCoup = {ion: coupling_cm * HC_CONVERSION 
+#SPIN_ORBIT_COUPLING_CONSTANTS = {ion: coupling_cm * HC_CONVERSION 
 #             for ion, coupling_cm in SPIN_ORBIT_COUPLING_CM.items()}
 
-SpOrbCoup = {
+SPIN_ORBIT_COUPLING_CONSTANTS = {
     'Ti2+': 15.002087353,
     'Ti3+': 19.093565722,
     'V2+': 20.829344424000002,
@@ -491,7 +495,7 @@ SpOrbCoup = {
 #######################
 
 #Import Radial Integrals
-radialI = {
+RADIAL_INTEGRALS_RARE_EARTH = {
     'Ce3+': [0.51, 0.0132, -0.0294, 1.456, 5.437, 42.26],
     'Dy3+': [0.527, -0.0199, -0.0316, 0.849, 1.977, 10.44],
     'Er3+': [0.544, -0.0427, -0.031, 0.773, 1.677, 8.431],
@@ -508,7 +512,7 @@ radialI = {
     'Yb3+': [0.571, -0.0725, -0.03, 0.71, 1.448, 7.003]
     }
 
-TMradialI = {
+RADIAL_INTEGRALS_TRANS_METAL = {
     'Ag2+': [0.55, 0.559], 'Ag3+': [0.499, 0.437],
     'Au3+': [0.635, 0.663],
     'Cd3+': [0.732, 1.739],
@@ -537,31 +541,37 @@ TMradialI = {
     'Zr+': [4.102, 25.077], 'Zr2+': [1.282, 2.94], 'Zr3+': [1.072, 1.932]
 }
 
-def RadialIntegral(ion,n):
+def calculate_radial_integral_RE(ion,n):
     """Returns the radial integral of a rare earth ion plus self-shielding.
     Comes out in units of Bohr radius"""
+
+    from . import RADIAL_INTEGRALS_RARE_EARTH # <- короче так будет, я хз как по-умному
+
     if ion == 'U4+':
-        U4r = {2:2.042, 4:7.632, 6:47.774}  # from Freeman, Desclaux, Lander, and Faber, PRB (1976), Table I
+        U4r = {2: 2.042, 4: 7.632, 6: 47.774}  # from Freeman, Desclaux, Lander, and Faber, PRB (1976), Table I
         return U4r[n]
     elif ion == 'U3+':
-        U3r = {2:2.346, 4:10.906, 6:90.544}  # from Freeman, Desclaux, Lander, and Faber, PRB (1976), Table I
+        U3r = {2: 2.346, 4: 10.906, 6: 90.544}  # from Freeman, Desclaux, Lander, and Faber, PRB (1976), Table I
         return U3r[n]
     else:
-        shielding = 1- radialI[ion][int(n/2-1)]
-        return radialI[ion][int(n/2-1) + 3] * shielding
+        shielding = 1- RADIAL_INTEGRALS_RARE_EARTH[ion][int(n/2-1)]
+        return RADIAL_INTEGRALS_RARE_EARTH[ion][int(n/2-1) + 3] * shielding
 
-def RadialIntegral_TM(ion,n):
+def calculate_radial_integral_TM(ion,n):
+
+    from . import RADIAL_INTEGRALS_TRANS_METAL  # <- короче так будет, я хз как по-умному
+
     """Returns the radial integral of a transition ion.
     The listed constants are in AA, so we convert to Bohr Radii"""
     BohrRadius= 0.5291772109 # Official NIST value in units of /AA
-    return TMradialI[ion][int(n/2-1)]/(BohrRadius**n)
+    return RADIAL_INTEGRALS_TRANS_METAL[ion][int(n/2-1)]/(BohrRadius**n)
 
 
 #######################
 # Half-filled Ions
 #######################
 
-HalfList = ['Mn2+',
+ION_HALF_FILLED = ['Mn2+',
             'Fe2+','Fe3+',
             'Co2+','Co3+',
             'Ni2+','Ni3+',
@@ -574,7 +584,7 @@ HalfList = ['Mn2+',
             'Ir2+','Ir3+',
             'Au3+']
 
-notHalfList = ['Ti2+','Ti3+',
+ION_NOT_HALF_FILLED = ['Ti2+','Ti3+',
                 'V2+','V3+','V4+',
                 'Cr2+','Cr3+','Cr4+','Cr5+',
                 'Mn3+','Mn4+','Mn5+','Mn6+',

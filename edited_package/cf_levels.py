@@ -4,7 +4,7 @@ from scipy import optimize
 import scipy.linalg as LA
 from scipy.special import wofz
 
-from edited_package.constants import Jion
+from edited_package.constants import ION_NUMS_RARE_EARTH
 from edited_package.form_factors import RE_FormFactor
 from edited_package.create_fit_function import makeFitFunction
 from edited_package.operators import Ket, Operator, LSOperator
@@ -37,7 +37,7 @@ class CFLevels:
 
     @classmethod
     def Bdict(cls, ion, Bdict):
-        ionJ = Jion[ion][-1]
+        ionJ = ION_NUMS_RARE_EARTH[ion][-1]
         Stev_O = []
         Parameters = []
         for Bnm in Bdict:
@@ -773,7 +773,7 @@ def LandeGFactor(ion):
     Returns:
         float: Lande g-factor value
     """
-    s, l, j = Jion[ion]
+    s, l, j = ION_NUMS_RARE_EARTH[ion]
     return 1.5 + (s*(s+1.) - l*(l+1.))/(2.*j*(j+1.))
 
 ###################################

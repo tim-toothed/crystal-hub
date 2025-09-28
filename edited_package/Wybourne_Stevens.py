@@ -1,4 +1,4 @@
-from edited_package.constants import LambdaConstants, LStheta, theta
+from edited_package.constants import WYBOURNE_STEVENS_CONSTS, LStheta, theta
 
 def WybourneToStevens(ion, Bdict, LS=False):
     StevDict = {}
@@ -6,9 +6,9 @@ def WybourneToStevens(ion, Bdict, LS=False):
         n = int(Anm[1])
         m = int(Anm[2:])
         if LS:
-            StevDict['B'+Anm[1:]] = LambdaConstants[n][m]*LStheta(ion,n)*Bdict[Anm]
+            StevDict['B'+Anm[1:]] = WYBOURNE_STEVENS_CONSTS[n][m]*LStheta(ion,n)*Bdict[Anm]
         else:
-            StevDict['B'+Anm[1:]] = LambdaConstants[n][m]*theta(ion,n)*Bdict[Anm]
+            StevDict['B'+Anm[1:]] = WYBOURNE_STEVENS_CONSTS[n][m]*theta(ion,n)*Bdict[Anm]
     return StevDict
 
 def StevensToWybourne(ion, Bdict, LS=False):
@@ -17,7 +17,7 @@ def StevensToWybourne(ion, Bdict, LS=False):
         n = int(Anm[1])
         m = int(Anm[2:])
         if LS:
-            WybDict['B'+Anm[1:]] = Bdict[Anm]/(LambdaConstants[n][m]*LStheta(ion,n))
+            WybDict['B'+Anm[1:]] = Bdict[Anm]/(WYBOURNE_STEVENS_CONSTS[n][m]*LStheta(ion,n))
         else:
-            WybDict['B'+Anm[1:]] = Bdict[Anm]/(LambdaConstants[n][m]*theta(ion,n))
+            WybDict['B'+Anm[1:]] = Bdict[Anm]/(WYBOURNE_STEVENS_CONSTS[n][m]*theta(ion,n))
     return WybDict
