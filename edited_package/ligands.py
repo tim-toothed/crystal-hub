@@ -3,8 +3,7 @@ from scipy import optimize
 
 from edited_package.lattice_class import lattice
 from edited_package.plot_ligands import exportLigandCif
-from edited_package.constants import calculate_tesseral_harmonic, theta, calculate_radial_integral_RE, Constant, LStheta, PFalpha, PFbeta, calculate_radial_integral_TM, ION_NUMS_RARE_EARTH
-from edited_package.half_filled import IsHalfFilled
+from edited_package.constants import calculate_tesseral_harmonic, theta, calculate_radial_integral_RE, Constant, LStheta, PFalpha, PFbeta, calculate_radial_integral_TM, ION_NUMS_RARE_EARTH, is_half_filled
 from edited_package.stevens_operators import StevensOp, LS_StevensOp
 from edited_package.create_fit_function import makeFitFunction
 from edited_package.cf_levels import CFLevels, LS_CFLevels
@@ -352,7 +351,7 @@ class LS_Ligands:
         Create point charge model of the crystal fields.
         Returns a CFLevels object with the hamiltonian defined.
         Define LigandCharge in units of e.'''
-        halffilled = IsHalfFilled(self.ion)
+        halffilled = is_half_filled(self.ion)
         
         self.IonCharge = IonCharge
         # Lock suppressmm into whatever it was when PointChargeModel was first called.

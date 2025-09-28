@@ -1,6 +1,6 @@
 # 📊 Python Package Dependency Analysis Report
 
-**Generated:** 2025-09-25 00:06:24
+**Generated:** 2025-09-28 13:09:16
 
 **Package:** `edited_package`
 
@@ -14,7 +14,6 @@
 - [constants.py](#constants-py)
 - [create_fit_function.py](#create_fit_function-py)
 - [form_factors.py](#form_factors-py)
-- [half_filled.py](#half_filled-py)
 - [import_CIF.py](#import_CIF-py)
 - [latex_cef_print.py](#latex_cef_print-py)
 - [lattice_class.py](#lattice_class-py)
@@ -58,10 +57,10 @@
 - `Hamiltonian()` *(line 55)* - 4 usages
   <details><summary>View all 4 usages</summary>
 
-  - `ligands.py`: class:Ligands → method:PointChargeModel (line 141)
-  - `ligands.py`: class:LS_Ligands → method:PointChargeModel (line 343)
-  - `ligands.py`: class:LS_Ligands → method:TMPointChargeModel (line 420)
-  - `ligands.py`: class:LS_Ligands → method:UnknownTMPointChargeModel (line 495)
+  - `ligands.py`: class:Ligands → method:PointChargeModel (line 140)
+  - `ligands.py`: class:LS_Ligands → method:PointChargeModel (line 342)
+  - `ligands.py`: class:LS_Ligands → method:TMPointChargeModel (line 419)
+  - `ligands.py`: class:LS_Ligands → method:UnknownTMPointChargeModel (line 494)
   </details>
 
 - `newCoeff()` *(line 62)* - 0 usages
@@ -80,8 +79,8 @@
   - `cf_levels.py`: class:LS_CFLevels → method:normalizedNeutronSpectrum (line 960)
   - `cf_levels.py`: class:LS_CFLevels → method:printEigenvectors (line 1044)
   - `cf_levels.py`: class:LS_CFLevels → method:printLaTexEigenvectors (line 1403)
-  - `ligands.py`: class:Ligands → method:FitCharges (line 183)
-  - `ligands.py`: class:LS_Ligands → method:FitChargesNeutrons (line 522)
+  - `ligands.py`: class:Ligands → method:FitCharges (line 182)
+  - `ligands.py`: class:LS_Ligands → method:FitChargesNeutrons (line 521)
   </details>
 
 - `diagonalize_banded()` *(line 88)* - 1 usages
@@ -219,8 +218,8 @@
 
 <details><summary>📍 View all 2 class usages</summary>
 
-- `ligands.py`: import-statement (line 10)
-- `ligands.py`: class:Ligands → method:PointChargeModel (line 141)
+- `ligands.py`: import-statement (line 9)
+- `ligands.py`: class:Ligands → method:PointChargeModel (line 140)
 </details>
 
 #### **OpticalTransition** *(line 710)*
@@ -254,10 +253,10 @@
 - `Hamiltonian()` *(line 846)* - 4 usages
   <details><summary>View all 4 usages</summary>
 
-  - `ligands.py`: class:Ligands → method:PointChargeModel (line 141)
-  - `ligands.py`: class:LS_Ligands → method:PointChargeModel (line 343)
-  - `ligands.py`: class:LS_Ligands → method:TMPointChargeModel (line 420)
-  - `ligands.py`: class:LS_Ligands → method:UnknownTMPointChargeModel (line 495)
+  - `ligands.py`: class:Ligands → method:PointChargeModel (line 140)
+  - `ligands.py`: class:LS_Ligands → method:PointChargeModel (line 342)
+  - `ligands.py`: class:LS_Ligands → method:TMPointChargeModel (line 419)
+  - `ligands.py`: class:LS_Ligands → method:UnknownTMPointChargeModel (line 494)
   </details>
 
 - `newCoeff()` *(line 871)* - 0 usages
@@ -276,8 +275,8 @@
   - `cf_levels.py`: class:LS_CFLevels → method:normalizedNeutronSpectrum (line 960)
   - `cf_levels.py`: class:LS_CFLevels → method:printEigenvectors (line 1044)
   - `cf_levels.py`: class:LS_CFLevels → method:printLaTexEigenvectors (line 1403)
-  - `ligands.py`: class:Ligands → method:FitCharges (line 183)
-  - `ligands.py`: class:LS_Ligands → method:FitChargesNeutrons (line 522)
+  - `ligands.py`: class:Ligands → method:FitCharges (line 182)
+  - `ligands.py`: class:LS_Ligands → method:FitChargesNeutrons (line 521)
   </details>
 
 - `_findbands()` *(line 895)* - 3 usages
@@ -420,10 +419,10 @@
 
 <details><summary>📍 View all 4 class usages</summary>
 
-- `ligands.py`: import-statement (line 10)
-- `ligands.py`: class:LS_Ligands → method:PointChargeModel (line 343)
-- `ligands.py`: class:LS_Ligands → method:TMPointChargeModel (line 420)
-- `ligands.py`: class:LS_Ligands → method:UnknownTMPointChargeModel (line 495)
+- `ligands.py`: import-statement (line 9)
+- `ligands.py`: class:LS_Ligands → method:PointChargeModel (line 342)
+- `ligands.py`: class:LS_Ligands → method:TMPointChargeModel (line 419)
+- `ligands.py`: class:LS_Ligands → method:UnknownTMPointChargeModel (line 494)
 </details>
 
 ### 📊 Functions
@@ -542,45 +541,58 @@
 
 ### 📊 Functions
 
-#### **Constant()** *(line 97)*
+#### **Constant()** *(line 100)*
 
 - **Used by:** 9 files
 
 <details><summary>View all 9 usages</summary>
 
 - `ligands.py`: import-statement (line 6)
-- `ligands.py`: class:Ligands → method:PointChargeModel (line 129)
-- `ligands.py`: class:Ligands → method:PointChargeModel (line 129)
-- `ligands.py`: class:LS_Ligands → method:PointChargeModel (line 328)
-- `ligands.py`: class:LS_Ligands → method:PointChargeModel (line 328)
-- `ligands.py`: class:LS_Ligands → method:TMPointChargeModel (line 404)
-- `ligands.py`: class:LS_Ligands → method:TMPointChargeModel (line 404)
-- `ligands.py`: class:LS_Ligands → method:UnknownTMPointChargeModel (line 480)
-- `ligands.py`: class:LS_Ligands → method:UnknownTMPointChargeModel (line 480)
+- `ligands.py`: class:Ligands → method:PointChargeModel (line 128)
+- `ligands.py`: class:Ligands → method:PointChargeModel (line 128)
+- `ligands.py`: class:LS_Ligands → method:PointChargeModel (line 327)
+- `ligands.py`: class:LS_Ligands → method:PointChargeModel (line 327)
+- `ligands.py`: class:LS_Ligands → method:TMPointChargeModel (line 403)
+- `ligands.py`: class:LS_Ligands → method:TMPointChargeModel (line 403)
+- `ligands.py`: class:LS_Ligands → method:UnknownTMPointChargeModel (line 479)
+- `ligands.py`: class:LS_Ligands → method:UnknownTMPointChargeModel (line 479)
 </details>
 
-#### **TessHarm()** *(line 102)*
+#### **calculate_tesseral_harmonic()** *(line 105)*
 
 - **Used by:** 9 files
 
 <details><summary>View all 9 usages</summary>
 
 - `ligands.py`: import-statement (line 6)
-- `ligands.py`: class:Ligands → method:PointChargeModel (line 125)
-- `ligands.py`: class:Ligands → method:PointChargeModel (line 125)
-- `ligands.py`: class:LS_Ligands → method:PointChargeModel (line 324)
-- `ligands.py`: class:LS_Ligands → method:PointChargeModel (line 324)
-- `ligands.py`: class:LS_Ligands → method:TMPointChargeModel (line 400)
-- `ligands.py`: class:LS_Ligands → method:TMPointChargeModel (line 400)
-- `ligands.py`: class:LS_Ligands → method:UnknownTMPointChargeModel (line 476)
-- `ligands.py`: class:LS_Ligands → method:UnknownTMPointChargeModel (line 476)
+- `ligands.py`: class:Ligands → method:PointChargeModel (line 124)
+- `ligands.py`: class:Ligands → method:PointChargeModel (line 124)
+- `ligands.py`: class:LS_Ligands → method:PointChargeModel (line 323)
+- `ligands.py`: class:LS_Ligands → method:PointChargeModel (line 323)
+- `ligands.py`: class:LS_Ligands → method:TMPointChargeModel (line 399)
+- `ligands.py`: class:LS_Ligands → method:TMPointChargeModel (line 399)
+- `ligands.py`: class:LS_Ligands → method:UnknownTMPointChargeModel (line 475)
+- `ligands.py`: class:LS_Ligands → method:UnknownTMPointChargeModel (line 475)
 </details>
 
-#### **_tesseral_dispatch()** *(line 120)*
+#### **_tesseral_dispatch()** *(line 117)*
 
 - **Used by:** 0 file
 
-#### **PFalpha()** *(line 186)*
+#### **PFalpha()** *(line 189)*
+
+- **Used by:** 5 files
+
+<details><summary>View all 5 usages</summary>
+
+- `ligands.py`: import-statement (line 6)
+- `ligands.py`: class:LS_Ligands → method:TMPointChargeModel (line 387)
+- `ligands.py`: class:LS_Ligands → method:TMPointChargeModel (line 387)
+- `ligands.py`: class:LS_Ligands → method:UnknownTMPointChargeModel (line 463)
+- `ligands.py`: class:LS_Ligands → method:UnknownTMPointChargeModel (line 463)
+</details>
+
+#### **PFbeta()** *(line 209)*
 
 - **Used by:** 5 files
 
@@ -593,32 +605,19 @@
 - `ligands.py`: class:LS_Ligands → method:UnknownTMPointChargeModel (line 464)
 </details>
 
-#### **PFbeta()** *(line 206)*
-
-- **Used by:** 5 files
-
-<details><summary>View all 5 usages</summary>
-
-- `ligands.py`: import-statement (line 6)
-- `ligands.py`: class:LS_Ligands → method:TMPointChargeModel (line 389)
-- `ligands.py`: class:LS_Ligands → method:TMPointChargeModel (line 389)
-- `ligands.py`: class:LS_Ligands → method:UnknownTMPointChargeModel (line 465)
-- `ligands.py`: class:LS_Ligands → method:UnknownTMPointChargeModel (line 465)
-</details>
-
-#### **PFgamma()** *(line 237)*
+#### **PFgamma()** *(line 240)*
 
 - **Used by:** 0 file
 
-#### **LStheta()** *(line 287)*
+#### **LStheta()** *(line 290)*
 
 - **Used by:** 8 files
 
 <details><summary>View all 8 usages</summary>
 
 - `ligands.py`: import-statement (line 6)
-- `ligands.py`: class:LS_Ligands → method:PointChargeModel (line 328)
-- `ligands.py`: class:LS_Ligands → method:PointChargeModel (line 328)
+- `ligands.py`: class:LS_Ligands → method:PointChargeModel (line 327)
+- `ligands.py`: class:LS_Ligands → method:PointChargeModel (line 327)
 - `wybourne_stevens.py`: import-statement (line 1)
 - `wybourne_stevens.py`: function:WybourneToStevens (line 9)
 - `wybourne_stevens.py`: function:WybourneToStevens (line 9)
@@ -626,15 +625,15 @@
 - `wybourne_stevens.py`: function:StevensToWybourne (line 20)
 </details>
 
-#### **theta()** *(line 309)*
+#### **theta()** *(line 312)*
 
 - **Used by:** 26 files
 
 <details><summary>View all 26 usages</summary>
 
 - `ligands.py`: import-statement (line 6)
-- `ligands.py`: class:Ligands → method:PointChargeModel (line 129)
-- `ligands.py`: class:Ligands → method:PointChargeModel (line 129)
+- `ligands.py`: class:Ligands → method:PointChargeModel (line 128)
+- `ligands.py`: class:Ligands → method:PointChargeModel (line 128)
 - `moments_of_inertia.py`: function:anglesToVector (line 53)
 - `moments_of_inertia.py`: function:anglesToVector (line 53)
 - `moments_of_inertia.py`: function:anglesToVector (line 53)
@@ -660,17 +659,17 @@
 - `wybourne_stevens.py`: function:StevensToWybourne (line 22)
 </details>
 
-#### **RadialIntegral()** *(line 540)*
+#### **calculate_radial_integral_RE()** *(line 544)*
 
 - **Used by:** 10 files
 
 <details><summary>View all 10 usages</summary>
 
 - `ligands.py`: import-statement (line 6)
-- `ligands.py`: class:Ligands → method:PointChargeModel (line 129)
-- `ligands.py`: class:Ligands → method:PointChargeModel (line 129)
-- `ligands.py`: class:LS_Ligands → method:PointChargeModel (line 328)
-- `ligands.py`: class:LS_Ligands → method:PointChargeModel (line 328)
+- `ligands.py`: class:Ligands → method:PointChargeModel (line 128)
+- `ligands.py`: class:Ligands → method:PointChargeModel (line 128)
+- `ligands.py`: class:LS_Ligands → method:PointChargeModel (line 327)
+- `ligands.py`: class:LS_Ligands → method:PointChargeModel (line 327)
 - `rescale_CEF.py`: import-statement (line 1)
 - `rescale_CEF.py`: function:rescaleCEF (line 7)
 - `rescale_CEF.py`: function:rescaleCEF (line 7)
@@ -678,23 +677,32 @@
 - `rescale_CEF.py`: function:rescaleCEF (line 7)
 </details>
 
-#### **RadialIntegral_TM()** *(line 553)*
+#### **calculate_radial_integral_TM()** *(line 560)*
 
 - **Used by:** 3 files
 
 <details><summary>View all 3 usages</summary>
 
 - `ligands.py`: import-statement (line 6)
-- `ligands.py`: class:LS_Ligands → method:TMPointChargeModel (line 404)
-- `ligands.py`: class:LS_Ligands → method:TMPointChargeModel (line 404)
+- `ligands.py`: class:LS_Ligands → method:TMPointChargeModel (line 403)
+- `ligands.py`: class:LS_Ligands → method:TMPointChargeModel (line 403)
+</details>
+
+#### **is_half_filled()** *(line 608)*
+
+- **Used by:** 3 files
+
+<details><summary>View all 3 usages</summary>
+
+- `ligands.py`: import-statement (line 6)
+- `ligands.py`: class:LS_Ligands → method:TMPointChargeModel (line 354)
+- `ligands.py`: class:LS_Ligands → method:TMPointChargeModel (line 354)
 </details>
 
 ### 🔧 Constants
 
-- **SPIN_ORBIT_COUPLING_CM** *(line 337)* - 0 usages
-### 📌 Variables
-
-- **Jion** *(line 43)* - 11 usages
+- **ION_NUMS_TRANS_METAL** *(line 19)* - 0 usages
+- **ION_NUMS_RARE_EARTH** *(line 45)* - 11 usages
   <details><summary>View usages</summary>
 
   - `cf_levels.py`: import-statement (line 7)
@@ -705,12 +713,12 @@
   - `import_CIF.py`: import-statement (line 6)
   - `import_CIF.py`: function:importCIF (line 71)
   - `ligands.py`: import-statement (line 6)
-  - `ligands.py`: class:Ligands → method:PointChargeModel (line 104)
+  - `ligands.py`: class:Ligands → method:PointChargeModel (line 103)
+  - `ligands.py`: class:LS_Ligands → method:__init__ (line 219)
   - `ligands.py`: class:LS_Ligands → method:__init__ (line 220)
-  - `ligands.py`: class:LS_Ligands → method:__init__ (line 221)
   </details>
 
-- **LambdaConstants** *(line 57)* - 5 usages
+- **WYBOURNE_STEVENS_CONSTS** *(line 59)* - 5 usages
   <details><summary>View usages</summary>
 
   - `wybourne_stevens.py`: import-statement (line 1)
@@ -720,7 +728,8 @@
   - `wybourne_stevens.py`: function:StevensToWybourne (line 22)
   </details>
 
-- **SpOrbCoup** *(line 416)* - 4 usages
+- **SPIN_ORBIT_COUPLING_CM** *(line 341)* - 0 usages
+- **SPIN_ORBIT_COUPLING_CONSTANTS** *(line 420)* - 4 usages
   <details><summary>View usages</summary>
 
   - `import_CIF.py`: import-statement (line 6)
@@ -729,58 +738,65 @@
   - `import_CIF.py`: function:checkTMexist (line 121)
   </details>
 
-- **TMradialI** *(line 511)* - 2 usages
+- **RADIAL_INTEGRALS_RARE_EARTH** *(line 498)* - 1 usages
   <details><summary>View usages</summary>
 
+  - `constants.py`: import-statement (line 548)
+  </details>
+
+- **RADIAL_INTEGRALS_TRANS_METAL** *(line 515)* - 3 usages
+  <details><summary>View usages</summary>
+
+  - `constants.py`: import-statement (line 562)
   - `import_CIF.py`: import-statement (line 6)
   - `import_CIF.py`: function:checkTMexist (line 119)
   </details>
 
-- **HalfList** *(line 564)* - 4 usages
+- **ION_HALF_FILLED** *(line 574)* - 3 usages
   <details><summary>View usages</summary>
 
-  - `half_filled.py`: function:IsHalfFilled (line 4)
-  - `half_filled.py`: function:IsHalfFilled (line 37)
+  - `constants.py`: import-statement (line 611)
   - `import_CIF.py`: import-statement (line 6)
   - `import_CIF.py`: function:checkTMexist (line 123)
   </details>
 
-- **notHalfList** *(line 577)* - 4 usages
+- **ION_NOT_HALF_FILLED** *(line 587)* - 3 usages
   <details><summary>View usages</summary>
 
-  - `half_filled.py`: function:IsHalfFilled (line 16)
-  - `half_filled.py`: function:IsHalfFilled (line 39)
+  - `constants.py`: import-statement (line 611)
   - `import_CIF.py`: import-statement (line 6)
   - `import_CIF.py`: function:checkTMexist (line 123)
   </details>
 
-- **ahc** *(line 602)* - 8 usages
+### 📌 Variables
+
+- **ahc** *(line 624)* - 8 usages
+  <details><summary>View usages</summary>
+
+  - `ligands.py`: class:Ligands → method:PointChargeModel (line 106)
+  - `ligands.py`: class:Ligands → method:PointChargeModel (line 128)
+  - `ligands.py`: class:LS_Ligands → method:PointChargeModel (line 306)
+  - `ligands.py`: class:LS_Ligands → method:PointChargeModel (line 327)
+  - `ligands.py`: class:LS_Ligands → method:TMPointChargeModel (line 379)
+  - `ligands.py`: class:LS_Ligands → method:TMPointChargeModel (line 403)
+  - `ligands.py`: class:LS_Ligands → method:UnknownTMPointChargeModel (line 455)
+  - `ligands.py`: class:LS_Ligands → method:UnknownTMPointChargeModel (line 479)
+  </details>
+
+- **a0** *(line 625)* - 8 usages
   <details><summary>View usages</summary>
 
   - `ligands.py`: class:Ligands → method:PointChargeModel (line 107)
-  - `ligands.py`: class:Ligands → method:PointChargeModel (line 129)
+  - `ligands.py`: class:Ligands → method:PointChargeModel (line 128)
   - `ligands.py`: class:LS_Ligands → method:PointChargeModel (line 307)
-  - `ligands.py`: class:LS_Ligands → method:PointChargeModel (line 328)
+  - `ligands.py`: class:LS_Ligands → method:PointChargeModel (line 327)
   - `ligands.py`: class:LS_Ligands → method:TMPointChargeModel (line 380)
-  - `ligands.py`: class:LS_Ligands → method:TMPointChargeModel (line 404)
+  - `ligands.py`: class:LS_Ligands → method:TMPointChargeModel (line 403)
   - `ligands.py`: class:LS_Ligands → method:UnknownTMPointChargeModel (line 456)
-  - `ligands.py`: class:LS_Ligands → method:UnknownTMPointChargeModel (line 480)
+  - `ligands.py`: class:LS_Ligands → method:UnknownTMPointChargeModel (line 479)
   </details>
 
-- **a0** *(line 603)* - 8 usages
-  <details><summary>View usages</summary>
-
-  - `ligands.py`: class:Ligands → method:PointChargeModel (line 108)
-  - `ligands.py`: class:Ligands → method:PointChargeModel (line 129)
-  - `ligands.py`: class:LS_Ligands → method:PointChargeModel (line 308)
-  - `ligands.py`: class:LS_Ligands → method:PointChargeModel (line 328)
-  - `ligands.py`: class:LS_Ligands → method:TMPointChargeModel (line 381)
-  - `ligands.py`: class:LS_Ligands → method:TMPointChargeModel (line 404)
-  - `ligands.py`: class:LS_Ligands → method:UnknownTMPointChargeModel (line 457)
-  - `ligands.py`: class:LS_Ligands → method:UnknownTMPointChargeModel (line 480)
-  </details>
-
-- **muB** *(line 604)* - 21 usages
+- **muB** *(line 626)* - 21 usages
   <details><summary>View usages</summary>
 
   - `cf_levels.py`: class:CFLevels → method:magnetization (line 404)
@@ -806,7 +822,7 @@
   - `operators.py`: class:LSOperator → method:magnetization (line 374)
   </details>
 
-- **k_B** *(line 605)* - 29 usages
+- **k_B** *(line 627)* - 29 usages
   <details><summary>View usages</summary>
 
   - `cf_levels.py`: class:CFLevels → method:magnetization (line 427)
@@ -859,11 +875,11 @@
 - `cf_levels.py`: class:CFLevels → method:fitdata_GlobalOpt (line 664)
 - `cf_levels.py`: class:LS_CFLevels → method:fitdata (line 1381)
 - `cf_levels.py`: class:LS_CFLevels → method:fitdata (line 1381)
-- `ligands.py`: import-statement (line 9)
-- `ligands.py`: class:Ligands → method:FitCharges (line 158)
-- `ligands.py`: class:Ligands → method:FitCharges (line 158)
-- `ligands.py`: class:LS_Ligands → method:FitChargesNeutrons (line 505)
-- `ligands.py`: class:LS_Ligands → method:FitChargesNeutrons (line 505)
+- `ligands.py`: import-statement (line 8)
+- `ligands.py`: class:Ligands → method:FitCharges (line 157)
+- `ligands.py`: class:Ligands → method:FitCharges (line 157)
+- `ligands.py`: class:LS_Ligands → method:FitChargesNeutrons (line 504)
+- `ligands.py`: class:LS_Ligands → method:FitChargesNeutrons (line 504)
 </details>
 
 #### **resultfunc()** *(line 51)*
@@ -901,23 +917,6 @@
 - `cf_levels.py`: class:CFLevels → method:normalizedNeutronSpectrum2D (line 279)
 - `cf_levels.py`: class:LS_CFLevels → method:neutronSpectrum2D (line 951)
 - `cf_levels.py`: class:LS_CFLevels → method:neutronSpectrum2D (line 951)
-</details>
-
----
-
-## 📁 half_filled.py {#half_filled-py}
-
-### 📊 Functions
-
-#### **IsHalfFilled()** *(line 1)*
-
-- **Used by:** 3 files
-
-<details><summary>View all 3 usages</summary>
-
-- `ligands.py`: import-statement (line 7)
-- `ligands.py`: class:LS_Ligands → method:TMPointChargeModel (line 355)
-- `ligands.py`: class:LS_Ligands → method:TMPointChargeModel (line 355)
 </details>
 
 ---
@@ -974,14 +973,14 @@
 - `cif_file.py`: class:CifFile → method:__init__ (line 154)
 - `cif_file.py`: class:CifFile → method:__init__ (line 154)
 - `ligands.py`: import-statement (line 4)
-- `ligands.py`: class:Ligands → method:__init__ (line 20)
-- `ligands.py`: class:Ligands → method:__init__ (line 20)
-- `ligands.py`: class:Ligands → method:__init__ (line 24)
-- `ligands.py`: class:Ligands → method:__init__ (line 24)
-- `ligands.py`: class:LS_Ligands → method:__init__ (line 208)
-- `ligands.py`: class:LS_Ligands → method:__init__ (line 208)
-- `ligands.py`: class:LS_Ligands → method:__init__ (line 212)
-- `ligands.py`: class:LS_Ligands → method:__init__ (line 212)
+- `ligands.py`: class:Ligands → method:__init__ (line 19)
+- `ligands.py`: class:Ligands → method:__init__ (line 19)
+- `ligands.py`: class:Ligands → method:__init__ (line 23)
+- `ligands.py`: class:Ligands → method:__init__ (line 23)
+- `ligands.py`: class:LS_Ligands → method:__init__ (line 207)
+- `ligands.py`: class:LS_Ligands → method:__init__ (line 207)
+- `ligands.py`: class:LS_Ligands → method:__init__ (line 211)
+- `ligands.py`: class:LS_Ligands → method:__init__ (line 211)
 </details>
 
 ---
@@ -990,41 +989,41 @@
 
 ### 🏛️ Classes
 
-#### **Ligands** *(line 14)*
+#### **Ligands** *(line 13)*
 
 - **Used by:** 3 files
 
 
 **Methods:**
 
-- `__init__()` *(line 16)* - 0 usages
-- `rotateLigands()` *(line 31)* - 0 usages
-- `rotateLigandsZ()` *(line 37)* - 0 usages
-- `_rotateMatrix()` *(line 44)* - 4 usages
+- `__init__()` *(line 15)* - 0 usages
+- `rotateLigands()` *(line 30)* - 0 usages
+- `rotateLigandsZ()` *(line 36)* - 0 usages
+- `_rotateMatrix()` *(line 43)* - 4 usages
   <details><summary>View all 4 usages</summary>
 
-  - `ligands.py`: class:Ligands → method:rotateLigands (line 35)
-  - `ligands.py`: class:Ligands → method:rotateLigandsZ (line 41)
-  - `ligands.py`: class:LS_Ligands → method:rotateLigands (line 245)
-  - `ligands.py`: class:LS_Ligands → method:rotateLigandsZ (line 251)
+  - `ligands.py`: class:Ligands → method:rotateLigands (line 34)
+  - `ligands.py`: class:Ligands → method:rotateLigandsZ (line 40)
+  - `ligands.py`: class:LS_Ligands → method:rotateLigands (line 244)
+  - `ligands.py`: class:LS_Ligands → method:rotateLigandsZ (line 250)
   </details>
 
-- `exportCif()` *(line 68)* - 0 usages
-- `PointChargeModel()` *(line 72)* - 5 usages
+- `exportCif()` *(line 67)* - 0 usages
+- `PointChargeModel()` *(line 71)* - 5 usages
   <details><summary>View all 5 usages</summary>
 
   - `import_CIF.py`: function:importCIF (line 81)
   - `import_CIF.py`: function:importCIF (line 83)
-  - `ligands.py`: class:Ligands → method:FitCharges (line 179)
-  - `ligands.py`: class:Ligands → method:FitCharges (line 182)
-  - `ligands.py`: class:LS_Ligands → method:FitChargesNeutrons (line 521)
+  - `ligands.py`: class:Ligands → method:FitCharges (line 178)
+  - `ligands.py`: class:Ligands → method:FitCharges (line 181)
+  - `ligands.py`: class:LS_Ligands → method:FitChargesNeutrons (line 520)
   </details>
 
-- `FitChargesNeutrons()` *(line 149)* - 0 usages
-- `FitCharges()` *(line 154)* - 1 usages
+- `FitChargesNeutrons()` *(line 148)* - 0 usages
+- `FitCharges()` *(line 153)* - 1 usages
   <details><summary>View usages</summary>
 
-  - `ligands.py`: class:Ligands → method:FitChargesNeutrons (line 152)
+  - `ligands.py`: class:Ligands → method:FitChargesNeutrons (line 151)
   </details>
 
 
@@ -1035,44 +1034,44 @@
 - `import_CIF.py`: function:importCIF (line 77)
 </details>
 
-#### **LS_Ligands** *(line 200)*
+#### **LS_Ligands** *(line 199)*
 
 - **Used by:** 7 files
 
 
 **Methods:**
 
-- `__init__()` *(line 202)* - 0 usages
-- `rotateLigands()` *(line 241)* - 0 usages
-- `rotateLigandsZ()` *(line 247)* - 0 usages
-- `_rotateMatrix()` *(line 254)* - 4 usages
+- `__init__()` *(line 201)* - 0 usages
+- `rotateLigands()` *(line 240)* - 0 usages
+- `rotateLigandsZ()` *(line 246)* - 0 usages
+- `_rotateMatrix()` *(line 253)* - 4 usages
   <details><summary>View all 4 usages</summary>
 
-  - `ligands.py`: class:Ligands → method:rotateLigands (line 35)
-  - `ligands.py`: class:Ligands → method:rotateLigandsZ (line 41)
-  - `ligands.py`: class:LS_Ligands → method:rotateLigands (line 245)
-  - `ligands.py`: class:LS_Ligands → method:rotateLigandsZ (line 251)
+  - `ligands.py`: class:Ligands → method:rotateLigands (line 34)
+  - `ligands.py`: class:Ligands → method:rotateLigandsZ (line 40)
+  - `ligands.py`: class:LS_Ligands → method:rotateLigands (line 244)
+  - `ligands.py`: class:LS_Ligands → method:rotateLigandsZ (line 250)
   </details>
 
-- `PointChargeModel()` *(line 279)* - 5 usages
+- `PointChargeModel()` *(line 278)* - 5 usages
   <details><summary>View all 5 usages</summary>
 
   - `import_CIF.py`: function:importCIF (line 81)
   - `import_CIF.py`: function:importCIF (line 83)
-  - `ligands.py`: class:Ligands → method:FitCharges (line 179)
-  - `ligands.py`: class:Ligands → method:FitCharges (line 182)
-  - `ligands.py`: class:LS_Ligands → method:FitChargesNeutrons (line 521)
+  - `ligands.py`: class:Ligands → method:FitCharges (line 178)
+  - `ligands.py`: class:Ligands → method:FitCharges (line 181)
+  - `ligands.py`: class:LS_Ligands → method:FitChargesNeutrons (line 520)
   </details>
 
-- `TMPointChargeModel()` *(line 349)* - 2 usages
+- `TMPointChargeModel()` *(line 348)* - 2 usages
   <details><summary>View usages</summary>
 
   - `import_CIF.py`: function:importCIF (line 101)
   - `import_CIF.py`: function:importCIF (line 103)
   </details>
 
-- `UnknownTMPointChargeModel()` *(line 427)* - 0 usages
-- `FitChargesNeutrons()` *(line 501)* - 0 usages
+- `UnknownTMPointChargeModel()` *(line 426)* - 0 usages
+- `FitChargesNeutrons()` *(line 500)* - 0 usages
 
 <details><summary>📍 View all 7 class usages</summary>
 
@@ -1651,13 +1650,13 @@
   - `cf_levels.py`: class:LS_CFLevels → method:gtensorperturb (line 1352)
   - `cf_levels.py`: class:LS_CFLevels → method:gtensorperturb (line 1356)
   - `cf_levels.py`: class:LS_CFLevels → method:gtensorperturb (line 1357)
-  - `constants.py`: function:PFgamma (line 268)
-  - `constants.py`: function:PFgamma (line 272)
-  - `constants.py`: function:PFgamma (line 273)
-  - `constants.py`: function:PFgamma (line 274)
-  - `ligands.py`: class:LS_Ligands → method:__init__ (line 234)
-  - `ligands.py`: class:LS_Ligands → method:__init__ (line 234)
-  - `ligands.py`: class:LS_Ligands → method:__init__ (line 236)
+  - `constants.py`: function:PFgamma (line 271)
+  - `constants.py`: function:PFgamma (line 275)
+  - `constants.py`: function:PFgamma (line 276)
+  - `constants.py`: function:PFgamma (line 277)
+  - `ligands.py`: class:LS_Ligands → method:__init__ (line 233)
+  - `ligands.py`: class:LS_Ligands → method:__init__ (line 233)
+  - `ligands.py`: class:LS_Ligands → method:__init__ (line 235)
   - `operators.py`: class:LSOperator → method:magnetization (line 363)
   </details>
 
@@ -1687,9 +1686,9 @@
   - `cf_levels.py`: class:LS_CFLevels → method:gtensorperturb (line 1350)
   - `cf_levels.py`: class:LS_CFLevels → method:gtensorperturb (line 1356)
   - `cf_levels.py`: class:LS_CFLevels → method:gtensorperturb (line 1357)
-  - `ligands.py`: class:LS_Ligands → method:__init__ (line 232)
-  - `ligands.py`: class:LS_Ligands → method:__init__ (line 232)
-  - `ligands.py`: class:LS_Ligands → method:__init__ (line 236)
+  - `ligands.py`: class:LS_Ligands → method:__init__ (line 231)
+  - `ligands.py`: class:LS_Ligands → method:__init__ (line 231)
+  - `ligands.py`: class:LS_Ligands → method:__init__ (line 235)
   - `operators.py`: class:LSOperator → method:magnetization (line 361)
   </details>
 
@@ -1705,9 +1704,9 @@
   - `cf_levels.py`: class:LS_CFLevels → method:gtensorperturb (line 1351)
   - `cf_levels.py`: class:LS_CFLevels → method:gtensorperturb (line 1356)
   - `cf_levels.py`: class:LS_CFLevels → method:gtensorperturb (line 1357)
-  - `ligands.py`: class:LS_Ligands → method:__init__ (line 233)
-  - `ligands.py`: class:LS_Ligands → method:__init__ (line 233)
-  - `ligands.py`: class:LS_Ligands → method:__init__ (line 236)
+  - `ligands.py`: class:LS_Ligands → method:__init__ (line 232)
+  - `ligands.py`: class:LS_Ligands → method:__init__ (line 232)
+  - `ligands.py`: class:LS_Ligands → method:__init__ (line 235)
   - `operators.py`: class:LSOperator → method:magnetization (line 362)
   </details>
 
@@ -1719,9 +1718,9 @@
   - `cf_levels.py`: class:LS_CFLevels → method:__init__ (line 813)
   - `cf_levels.py`: class:LS_CFLevels → method:__init__ (line 824)
   - `cf_levels.py`: class:LS_CFLevels → method:__init__ (line 827)
-  - `ligands.py`: class:LS_Ligands → method:__init__ (line 231)
-  - `ligands.py`: class:LS_Ligands → method:__init__ (line 231)
-  - `ligands.py`: class:LS_Ligands → method:__init__ (line 236)
+  - `ligands.py`: class:LS_Ligands → method:__init__ (line 230)
+  - `ligands.py`: class:LS_Ligands → method:__init__ (line 230)
+  - `ligands.py`: class:LS_Ligands → method:__init__ (line 235)
   - `operators.py`: class:LSOperator → method:magnetization (line 366)
   </details>
 
@@ -1747,9 +1746,9 @@
   - `cf_levels.py`: class:LS_CFLevels → method:__init__ (line 813)
   - `cf_levels.py`: class:LS_CFLevels → method:__init__ (line 822)
   - `cf_levels.py`: class:LS_CFLevels → method:__init__ (line 825)
-  - `ligands.py`: class:LS_Ligands → method:__init__ (line 229)
-  - `ligands.py`: class:LS_Ligands → method:__init__ (line 229)
-  - `ligands.py`: class:LS_Ligands → method:__init__ (line 236)
+  - `ligands.py`: class:LS_Ligands → method:__init__ (line 228)
+  - `ligands.py`: class:LS_Ligands → method:__init__ (line 228)
+  - `ligands.py`: class:LS_Ligands → method:__init__ (line 235)
   - `operators.py`: class:LSOperator → method:magnetization (line 364)
   </details>
 
@@ -1761,9 +1760,9 @@
   - `cf_levels.py`: class:LS_CFLevels → method:__init__ (line 813)
   - `cf_levels.py`: class:LS_CFLevels → method:__init__ (line 823)
   - `cf_levels.py`: class:LS_CFLevels → method:__init__ (line 826)
-  - `ligands.py`: class:LS_Ligands → method:__init__ (line 230)
-  - `ligands.py`: class:LS_Ligands → method:__init__ (line 230)
-  - `ligands.py`: class:LS_Ligands → method:__init__ (line 236)
+  - `ligands.py`: class:LS_Ligands → method:__init__ (line 229)
+  - `ligands.py`: class:LS_Ligands → method:__init__ (line 229)
+  - `ligands.py`: class:LS_Ligands → method:__init__ (line 235)
   - `operators.py`: class:LSOperator → method:magnetization (line 365)
   </details>
 
@@ -1844,19 +1843,19 @@
 - `cf_levels.py`: class:LS_CFLevels → method:gtensorperturb (line 1350)
 - `cf_levels.py`: class:LS_CFLevels → method:gtensorperturb (line 1351)
 - `cf_levels.py`: class:LS_CFLevels → method:gtensorperturb (line 1352)
-- `ligands.py`: import-statement (line 11)
+- `ligands.py`: import-statement (line 10)
+- `ligands.py`: class:LS_Ligands → method:__init__ (line 228)
 - `ligands.py`: class:LS_Ligands → method:__init__ (line 229)
 - `ligands.py`: class:LS_Ligands → method:__init__ (line 230)
 - `ligands.py`: class:LS_Ligands → method:__init__ (line 231)
 - `ligands.py`: class:LS_Ligands → method:__init__ (line 232)
 - `ligands.py`: class:LS_Ligands → method:__init__ (line 233)
-- `ligands.py`: class:LS_Ligands → method:__init__ (line 234)
-- `ligands.py`: class:LS_Ligands → method:PointChargeModel (line 340)
-- `ligands.py`: class:LS_Ligands → method:PointChargeModel (line 340)
-- `ligands.py`: class:LS_Ligands → method:TMPointChargeModel (line 416)
-- `ligands.py`: class:LS_Ligands → method:TMPointChargeModel (line 416)
-- `ligands.py`: class:LS_Ligands → method:UnknownTMPointChargeModel (line 492)
-- `ligands.py`: class:LS_Ligands → method:UnknownTMPointChargeModel (line 492)
+- `ligands.py`: class:LS_Ligands → method:PointChargeModel (line 339)
+- `ligands.py`: class:LS_Ligands → method:PointChargeModel (line 339)
+- `ligands.py`: class:LS_Ligands → method:TMPointChargeModel (line 415)
+- `ligands.py`: class:LS_Ligands → method:TMPointChargeModel (line 415)
+- `ligands.py`: class:LS_Ligands → method:UnknownTMPointChargeModel (line 491)
+- `ligands.py`: class:LS_Ligands → method:UnknownTMPointChargeModel (line 491)
 </details>
 
 ---
@@ -1923,8 +1922,8 @@
 <details><summary>View all 3 usages</summary>
 
 - `ligands.py`: import-statement (line 5)
-- `ligands.py`: class:Ligands → method:exportCif (line 69)
-- `ligands.py`: class:Ligands → method:exportCif (line 69)
+- `ligands.py`: class:Ligands → method:exportCif (line 68)
+- `ligands.py`: class:Ligands → method:exportCif (line 68)
 </details>
 
 ---
@@ -1952,17 +1951,17 @@
 - `cf_levels.py`: import-statement (line 11)
 - `cf_levels.py`: class:CFLevels → method:Bdict (line 47)
 - `cf_levels.py`: class:CFLevels → method:Bdict (line 47)
-- `ligands.py`: import-statement (line 8)
-- `ligands.py`: class:Ligands → method:PointChargeModel (line 132)
-- `ligands.py`: class:Ligands → method:PointChargeModel (line 132)
-- `ligands.py`: class:Ligands → method:PointChargeModel (line 137)
-- `ligands.py`: class:Ligands → method:PointChargeModel (line 137)
-- `ligands.py`: class:LS_Ligands → method:PointChargeModel (line 334)
-- `ligands.py`: class:LS_Ligands → method:PointChargeModel (line 334)
-- `ligands.py`: class:LS_Ligands → method:TMPointChargeModel (line 410)
-- `ligands.py`: class:LS_Ligands → method:TMPointChargeModel (line 410)
-- `ligands.py`: class:LS_Ligands → method:UnknownTMPointChargeModel (line 486)
-- `ligands.py`: class:LS_Ligands → method:UnknownTMPointChargeModel (line 486)
+- `ligands.py`: import-statement (line 7)
+- `ligands.py`: class:Ligands → method:PointChargeModel (line 131)
+- `ligands.py`: class:Ligands → method:PointChargeModel (line 131)
+- `ligands.py`: class:Ligands → method:PointChargeModel (line 136)
+- `ligands.py`: class:Ligands → method:PointChargeModel (line 136)
+- `ligands.py`: class:LS_Ligands → method:PointChargeModel (line 333)
+- `ligands.py`: class:LS_Ligands → method:PointChargeModel (line 333)
+- `ligands.py`: class:LS_Ligands → method:TMPointChargeModel (line 409)
+- `ligands.py`: class:LS_Ligands → method:TMPointChargeModel (line 409)
+- `ligands.py`: class:LS_Ligands → method:UnknownTMPointChargeModel (line 485)
+- `ligands.py`: class:LS_Ligands → method:UnknownTMPointChargeModel (line 485)
 </details>
 
 #### **LS_StevensOp()** *(line 102)*
@@ -1974,13 +1973,13 @@
 - `cf_levels.py`: import-statement (line 11)
 - `cf_levels.py`: class:LS_CFLevels → method:Bdict (line 840)
 - `cf_levels.py`: class:LS_CFLevels → method:Bdict (line 840)
-- `ligands.py`: import-statement (line 8)
-- `ligands.py`: class:LS_Ligands → method:PointChargeModel (line 331)
-- `ligands.py`: class:LS_Ligands → method:PointChargeModel (line 331)
-- `ligands.py`: class:LS_Ligands → method:TMPointChargeModel (line 407)
-- `ligands.py`: class:LS_Ligands → method:TMPointChargeModel (line 407)
-- `ligands.py`: class:LS_Ligands → method:UnknownTMPointChargeModel (line 483)
-- `ligands.py`: class:LS_Ligands → method:UnknownTMPointChargeModel (line 483)
+- `ligands.py`: import-statement (line 7)
+- `ligands.py`: class:LS_Ligands → method:PointChargeModel (line 330)
+- `ligands.py`: class:LS_Ligands → method:PointChargeModel (line 330)
+- `ligands.py`: class:LS_Ligands → method:TMPointChargeModel (line 406)
+- `ligands.py`: class:LS_Ligands → method:TMPointChargeModel (line 406)
+- `ligands.py`: class:LS_Ligands → method:UnknownTMPointChargeModel (line 482)
+- `ligands.py`: class:LS_Ligands → method:UnknownTMPointChargeModel (line 482)
 </details>
 
 ---
@@ -2037,7 +2036,7 @@
 
 ## 📈 Summary Statistics
 
-- **Total files analyzed:** 21
+- **Total files analyzed:** 20
 - **Total entities discovered:** 208
 - **Total cross-file dependencies:** 1067
 
@@ -2066,7 +2065,7 @@
 | operators.py | 88 |
 | import_CIF.py | 34 |
 
-### ⚠️ Potentially Unused Entities (35 total)
+### ⚠️ Potentially Unused Entities (34 total)
 
 <details><summary>View all unused entities</summary>
 
@@ -2077,11 +2076,10 @@
 | `LandeGFactor` | FUNCTION | cf_levels.py | 765 |
 | `findRotationAxis` | FUNCTION | cif_symmetry_import.py | 332 |
 | `makeSymOpMatrix` | FUNCTION | cif_symmetry_import.py | 376 |
-| `JionTM` | VARIABLE | constants.py | 17 |
-| `_tesseral_dispatch` | FUNCTION | constants.py | 120 |
-| `PFgamma` | FUNCTION | constants.py | 237 |
-| `SPIN_ORBIT_COUPLING_CM` | CONSTANT | constants.py | 337 |
-| `radialI` | VARIABLE | constants.py | 494 |
+| `ION_NUMS_TRANS_METAL` | CONSTANT | constants.py | 19 |
+| `_tesseral_dispatch` | FUNCTION | constants.py | 117 |
+| `PFgamma` | FUNCTION | constants.py | 240 |
+| `SPIN_ORBIT_COUPLING_CM` | CONSTANT | constants.py | 341 |
 | `resultfunc` | FUNCTION | create_fit_function.py | 51 |
 | `makeCurveFitFunction` | FUNCTION | create_fit_function.py | 61 |
 | `resultfunc` | FUNCTION | create_fit_function.py | 106 |

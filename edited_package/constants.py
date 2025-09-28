@@ -605,6 +605,18 @@ ION_NOT_HALF_FILLED = ['Ti2+','Ti3+',
                 'Ir5+','Ir6+',
                 'Pt2+','Pt4+']
 
+def is_half_filled(ion):
+    '''determine if given ion has a half-filled shell or not.'''
+
+    from . import ION_HALF_FILLED, ION_NOT_HALF_FILLED  # <- короче так будет, я хз как по-умному
+
+    if ion in ION_HALF_FILLED:
+        return True
+    elif ion in ION_NOT_HALF_FILLED:
+        return False
+    else:
+        raise ValueError('{} is not a known ion for PyCrystalField.'.format(ion))
+
 #######################
 # Other Constants
 #######################
