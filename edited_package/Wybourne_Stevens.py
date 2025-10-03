@@ -1,4 +1,4 @@
-from edited_package.constants import WYBOURNE_STEVENS_CONSTS, LStheta, theta
+from .constants import WYBOURNE_STEVENS_CONSTS, LStheta, theta
 
 def WybourneToStevens(ion, Bdict, LS=False):
     StevDict = {}
