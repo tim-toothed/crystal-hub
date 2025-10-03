@@ -1,19 +1,19 @@
 import numpy as np
 
 class lattice:
-	def __init__(self,a,b,c,alpha,beta,gamma):
+	def __init__(self, length_a, length_b, length_c, angle_alpha, angle_beta, angle_gamma):
 		"""Define the unit cell"""
-		self.anorm = a
-		self.bnorm = b
-		self.cnorm = c
-		alpha = alpha*np.pi/180
-		beta = beta*np.pi/180
-		gamma = gamma*np.pi/180
-		self.a = a*np.array([1,0,0])
-		self.b = b*np.array([np.cos(gamma), np.sin(gamma), 0])
-		self.c = c*np.array([np.cos(beta), 
-			np.sin(beta)*np.cos(alpha)*np.sin(gamma), 
-			np.sin(alpha)*np.sin(beta) ])
+		self.anorm = length_a
+		self.bnorm = length_b
+		self.cnorm = length_c
+		angle_alpha = angle_alpha*np.pi/180
+		angle_beta = angle_beta*np.pi/180
+		angle_gamma = angle_gamma*np.pi/180
+		self.a = length_a*np.array([1,0,0])
+		self.b = length_b*np.array([np.cos(angle_gamma), np.sin(angle_gamma), 0])
+		self.c = length_c*np.array([np.cos(angle_beta), 
+			np.sin(angle_beta)*np.cos(angle_alpha)*np.sin(angle_gamma), 
+			np.sin(angle_alpha)*np.sin(angle_beta) ])
 		#Round numbers (eliminate tiny numbers)
 		self.b=np.around(self.b,decimals=8)
 		self.c=np.around(self.c,decimals=8)
