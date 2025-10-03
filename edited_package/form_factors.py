@@ -1,5 +1,5 @@
 import numpy as np
-from constants import ION_NUMS_RARE_EARTH
+from .constants import ION_NUMS_RARE_EARTH
 
 def importRE_FF(ion):
     coefs = [[],[]]
