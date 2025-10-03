@@ -1,5 +1,5 @@
 import numpy as np
-from operators import Operator
+from .operators import Operator
 
 
 def StevensOp(J,n,m):
