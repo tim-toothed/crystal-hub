@@ -1,363 +1,436 @@
-# Code to import a .cif file into a python object
+"""
+Simple CIF (Crystallographic Information File) Importer
+For crystal structure analysis in physics applications.
+
+This module provides functionality to:
+- Parse CIF files and extract crystallographic data
+- Generate unit cells from asymmetric units using symmetry operations
+- Calculate nuclear structure factors
+- Analyze multiple scattering paths
+"""
 
 import numpy as np
 from copy import deepcopy
-
-from edited_package.lattice_class import lattice
+from .lattice_class import Lattice
 
 
 class CifFile:
-	"""for importing .cif files into python"""
-	def __init__(self,infile):
+    """Simple and efficient CIF file importer for crystal structure analysis."""
+    
+    def __init__(self, filepath):
+        """Initialize and import CIF file."""
+        self.filepath = filepath
+        self.asymunitcell = []
+        self.unitcell = []
+        self.symops = []
+        self.atomsunitcell = {}
+        
+        # Parse the file
+        self._parse_cif()
+        
+        # Create Lattice object
+        self.latt = Lattice(
+            self.a, self.b, self.c,
+            self.alpha, self.beta, self.gamma
+        )
+        
+        print("CIF import complete.")
+    
+    def _parse_cif(self):
+        """Parse CIF file and extract all necessary data."""
+        with open(self.filepath, 'r') as f:
+            lines = f.readlines()
+        
+        i = 0
+        sites = []
+        symops = []
+        data_blocks = 0
+        
+        while i < len(lines):
+            line = lines[i]
+            
+            # Check for phase boundaries
+            if 'data_global' in line:
+                data_blocks += 1
+                if data_blocks > 1:
+                    break
+            if '=END' in line:
+                break
+            
+            # Parse unit cell parameters
+            if line.startswith('_cell_length_a'):
+                self.a = self._parse_number(line.split()[1])
+            elif line.startswith('_cell_length_b'):
+                self.b = self._parse_number(line.split()[1])
+            elif line.startswith('_cell_length_c'):
+                self.c = self._parse_number(line.split()[1])
+            elif line.startswith('_cell_angle_alpha'):
+                self.alpha = self._parse_number(line.split()[1])
+            elif line.startswith('_cell_angle_beta'):
+                self.beta = self._parse_number(line.split()[1])
+            elif line.startswith('_cell_angle_gamma'):
+                self.gamma = self._parse_number(line.split()[1])
+                print(f'Unit cell: {self.a}, {self.b}, {self.c}, {self.alpha}, {self.beta}, {self.gamma}')
+            
+            # Parse atomic positions
+            elif line.startswith("loop_") and i + 1 < len(lines):
+                next_line = lines[i + 1].strip()
+                if next_line.startswith("_atom_site_label") or next_line.startswith("_atom_site_type"):
+                    i = self._parse_atoms(lines, i + 1, sites)
+            
+            # Parse symmetry operations
+            elif line.startswith("loop_") and i + 1 < len(lines):
+                if any(keyword in lines[i + 1] for keyword in [
+                    "_space_group_symop", "_symmetry_equiv_pos"
+                ]):
+                    i = self._parse_symmetry(lines, i + 1, symops)
+            
+            i += 1
+        
+        # Validate results
+        if not sites:
+            raise RuntimeError("No atomic sites were found in the CIF file")
+        
+        if not symops:
+            print("Warning: No symmetry operations found, using P1")
+            symops = ['x,y,z']
+        
+        self.asymunitcell = sites
+        self.symops = symops
+        
+        # Generate unit cell
+        self.MakeUnitCell(sites, symops)
+    
+    def _parse_atoms(self, lines, start_idx, sites):
+        """Parse atomic positions from CIF loop."""
+        print("Importing atoms")
+        i = start_idx
+        
+        # First, identify field indices
+        fields = {}
+        field_count = 0
+        
+        while i < len(lines) and lines[i].strip().startswith('_atom'):
+            line = lines[i].strip()
+            if 'atom_site_fract_x' in line:
+                fields['x'] = field_count
+            elif 'atom_site_fract_y' in line:
+                fields['y'] = field_count
+            elif 'atom_site_fract_z' in line:
+                fields['z'] = field_count
+            elif 'atom_site_occupancy' in line:
+                fields['occ'] = field_count
+            elif 'atom_site_site_symmetry_order' in line or 'atom_site_symmetry_multiplicity' in line:
+                fields['symorder'] = field_count
+            elif 'site_type_symbol' in line:
+                fields['element'] = field_count
+            elif 'site_label' in line:
+                fields['label'] = field_count
+            field_count += 1
+            i += 1
+        
+        # Parse atom data
+        while i < len(lines):
+            line = lines[i].strip()
+            if not line or line.startswith('loop_') or line.startswith('#') or line.startswith('_'):
+                break
+            
+            parts = line.split()
+            if len(parts) < 3:
+                i += 1
+                continue
+            
+            # Extract atom data
+            atom = [''] * 10  # Pre-allocate list
+            atom[0] = parts[fields.get('label', 0)]
+            atom[1] = parts[fields.get('element', 1)]
+            
+            # Get fractional coordinates and wrap to unit cell
+            x = self._parse_number(parts[fields['x']])
+            y = self._parse_number(parts[fields['y']])
+            z = self._parse_number(parts[fields['z']])
+            
+            # Wrap to [0, 1)
+            atom[2] = x - int(x)
+            if atom[2] < 0: atom[2] += 1
+            atom[3] = y - int(y)
+            if atom[3] < 0: atom[3] += 1
+            atom[4] = z - int(z)
+            if atom[4] < 0: atom[4] += 1
+            
+            # Padding for compatibility
+            atom[5] = atom[6] = atom[7] = 0
+            
+            # Occupancy
+            atom[7] = self._parse_number(parts[fields['occ']]) if 'occ' in fields else 1.0
+            
+            # Symmetry order
+            atom[8] = int(parts[fields['symorder']]) if 'symorder' in fields else 0
+            
+            # Store label at end for compatibility
+            atom[9] = atom[0]
+            
+            sites.append(atom)
+            i += 1
+        
+        return i - 1
+    
+    def _parse_symmetry(self, lines, start_idx, symops):
+        """Parse symmetry operations from CIF loop."""
+        i = start_idx
+        
+        # Skip header lines
+        while i < len(lines) and '_' in lines[i]:
+            i += 1
+        
+        # Parse operations
+        while i < len(lines):
+            line = lines[i].strip()
+            if not line or line.startswith('loop_') or line.startswith('#'):
+                break
+            
+            # Extract symmetry operation
+            if '\'' in line:
+                quotes = [j for j, ch in enumerate(line) if ch == '\'']
+                if len(quotes) >= 2:
+                    symops.append(line[quotes[0]+1:quotes[1]])
+            else:
+                for part in line.split():
+                    if ',' in part:
+                        symops.append(part.strip())
+                        break
+            i += 1
+        
+        return i - 1
+    
+    def _parse_number(self, string):
+        """Parse numeric value from CIF, handling uncertainties and fractions."""
+        if '(' in string:
+            string = string[:string.index('(')]
+        
+        value = float(string)
+        
+        # Check for common fractions
+        threshold = 5e-5
+        if abs(value - 1/3) < threshold:
+            return 1/3
+        elif abs(value - 2/3) < threshold:
+            return 2/3
+        elif abs(value - 1/6) < threshold:
+            return 1/6
+        elif abs(value - 5/6) < threshold:
+            return 5/6
+        
+        return value
+    
+    def apply_sym_operation(self, symstring, atom):
+        """Apply symmetry operation to atomic position."""
+        newatom = list(atom)
+        x, y, z = atom[2], atom[3], atom[4]
+        
+        # Clean and substitute coordinates
+        symstring = symstring.replace(' ', '')
+        symstring = (symstring
+                    .replace('x', str(x)).replace('X', str(x))
+                    .replace('y', str(y)).replace('Y', str(y))
+                    .replace('z', str(z)).replace('Z', str(z)))
+        
+        # Evaluate each component
+        components = symstring.split(',')
+        newatom[2] = eval(components[0])
+        newatom[3] = eval(components[1])
+        newatom[4] = eval(components[2])
+        
+        # Wrap back to unit cell
+        for i in range(2, 5):
+            if newatom[i] < -0.001:
+                newatom[i] += 1
+            if newatom[i] >= 1.0:
+                newatom[i] -= 1
+        
+        return newatom
+    
+    def MakeUnitCell(self, sites, symops):
+        """Generate complete unit cell from asymmetric unit and symmetry operations."""
+        unitcell = []
+        
+        # Apply all symmetry operations to all sites
+        for symop in symops:
+            for site in sites:
+                new_atom = self.apply_sym_operation(symop, site)
+                
+                # Wrap to unit cell
+                for i in range(2, 5):
+                    new_atom[i] = new_atom[i] - int(new_atom[i])
+                    if new_atom[i] < 0:
+                        new_atom[i] += 1
+                
+                # Check for duplicates
+                is_duplicate = False
+                for existing in unitcell:
+                    if (existing[1] == new_atom[1] and  # Same element
+                        abs(existing[2] - new_atom[2]) < 0.001 and
+                        abs(existing[3] - new_atom[3]) < 0.001 and
+                        abs(existing[4] - new_atom[4]) < 0.001):
+                        is_duplicate = True
+                        break
+                
+                if not is_duplicate:
+                    unitcell.append(new_atom)
+        
+        # Keep only atoms inside unit cell
+        self.unitcell = []
+        for atom in unitcell:
+            if (0 <= atom[2] <= 1 and 
+                0 <= atom[3] <= 1 and 
+                0 <= atom[4] <= 1):
+                self.unitcell.append(atom)
+        
+        print(f'  {len(self.unitcell)} atoms added')
+        
+        # Create atom position dictionary by label
+        self.atomsunitcell = {}
+        for atom in self.unitcell:
+            label = atom[9]  # Label stored at end
+            if label not in self.atomsunitcell:
+                self.atomsunitcell[label] = []
+            self.atomsunitcell[label].append([atom[2], atom[3], atom[4]])
+        
+        # Convert to numpy arrays
+        for label in self.atomsunitcell:
+            self.atomsunitcell[label] = np.array(self.atomsunitcell[label])
+    
+    def StructureFactor(self, scattering_lengths, max_hkl):
+        """
+        Calculate nuclear structure factors.
+        
+        Args:
+            scattering_lengths: Dict of neutron scattering lengths by element (fm)
+            max_hkl: Maximum Miller index to calculate
+        
+        Returns:
+            Array of [h, k, l, |F|^2] for each reflection
+        """
+        # Validate scattering lengths
+        elements = set(atom[1] for atom in self.unitcell)
+        missing = [el for el in elements if el not in scattering_lengths]
+        if missing:
+            raise ValueError(
+                f"Missing scattering lengths for: {missing}\n"
+                "See: https://www.ncnr.nist.gov/resources/n-lengths/"
+            )
+        
+        # Build atom array: [x, y, z, b_coherent, occupancy]
+        atom_data = np.zeros((len(self.unitcell), 5))
+        for i, atom in enumerate(self.unitcell):
+            atom_data[i] = [
+                atom[2], atom[3], atom[4],
+                scattering_lengths[atom[1]],
+                atom[7]  # occupancy
+            ]
+        
+        # Generate reflection list
+        hkl_range = np.arange(-max_hkl + 1, max_hkl)
+        h, k, l = np.meshgrid(hkl_range, hkl_range, hkl_range)
+        reflections = np.column_stack([h.ravel(), k.ravel(), l.ravel()])
+        
+        # Calculate structure factors
+        sf = np.zeros((len(reflections), 4))
+        sf[:, :3] = reflections
+        
+        for i, hkl in enumerate(reflections):
+            # F = Σ b_j * occ_j * exp(2πi(h·r_j))
+            phase = 2j * np.pi * np.dot(atom_data[:, :3], hkl)
+            F = np.sum(atom_data[:, 3] * atom_data[:, 4] * np.exp(phase))
+            sf[i, 3] = abs(F) ** 2
+        
+        # Remove tiny values
+        sf[:, 3][sf[:, 3] < 1e-16] = 0.0
+        
+        self.SF = sf
+        return sf
+    
+    def MultipleScattering(self, ei, peak, xcut, ycut, threshold=0.05):
+        """
+        Analyze multiple scattering paths for a given reflection.
+        
+        Args:
+            ei: Incident neutron energy (meV)
+            peak: Target reflection [h, k, l]
+            xcut: First vector defining scattering plane
+            ycut: Second vector defining scattering plane  
+            threshold: Maximum deviation in Q-space
+        """
+        if not hasattr(self, 'SF'):
+            raise RuntimeError("Must calculate structure factors first")
+        
+        # Calculate incident wavevector (Å^-1)
+        k = 0.694693 * np.sqrt(ei)
+        
+        # Normalize scattering plane vectors
+        xcut_norm = xcut / np.linalg.norm(xcut)
+        ycut_norm = ycut / np.linalg.norm(ycut)
+        
+        # Calculate scattering angle for target peak
+        q_peak = np.linalg.norm(self.latt.inverseA(vect=np.array(peak)))
+        theta = np.arcsin(min(q_peak / (2 * k), 1.0))
+        
+        # Incident k in reciprocal space
+        k_h = k * (xcut_norm[0] * np.sin(theta) + ycut_norm[0] * np.cos(theta))
+        k_k = k * (xcut_norm[1] * np.sin(theta) + ycut_norm[1] * np.cos(theta))
+        k_l = k * (xcut_norm[2] * np.sin(theta) + ycut_norm[2] * np.cos(theta))
+        
+        print(f"\nMultiple scattering for {peak} peak, Ei = {ei} meV:")
+        print("-" * 45)
+        print("    dq \t \t intermediate peaks \t \t  SF^2")
+        
+        # Find multiple scattering paths
+        for t1 in self.SF:
+            if t1[3] == 0 or np.allclose(t1[:3], [0, 0, 0]):
+                continue
+            
+            # Calculate momentum transfer
+            t1_A = self.latt.inverseA(vect=t1[:3])
+            dq = np.sqrt((t1_A[0] - k_h)**2 + (t1_A[1] - k_k)**2 + (t1_A[2] - k_l)**2) - k
+            
+            if abs(dq) < threshold:
+                # Find second scattering
+                t2_hkl = np.array(peak) - t1[:3]
+                
+                # Get structure factor for second reflection
+                t2_sf = 0
+                for refl in self.SF:
+                    if np.allclose(refl[:3], t2_hkl):
+                        t2_sf = refl[3]
+                        break
+                
+                if t2_sf > 0 and not np.allclose(t2_hkl, [0, 0, 0]):
+                    # Check scattering angles are reasonable
+                    q1 = np.linalg.norm(t1[:3]) * 2 * np.pi / 10.0
+                    q2 = np.linalg.norm(t2_hkl) * 2 * np.pi / 10.0
+                    
+                    if q1 < 2*k and q2 < 2*k:
+                        total_sf = t1[3] * t2_sf
+                        print(f"   {dq:6.4f}\t {t1[:3].astype(int)}  {t2_hkl.astype(int)} \t {total_sf}")
 
-		f = open(infile)
-		lines = f.readlines()
-		f.close()
-		i=0
-		sites = []
-		symops = []
-		dataglobal = 0
-		while i < len(lines):
-			line = lines[i]
 
-			# Check if we're in first phase:
-			if 'data_global' in line:
-				print(line, i, dataglobal)
-				dataglobal += 1
-				if dataglobal > 1: break #new phase!
-			if '=END' in line: break
-
-			#Find the unit cell parameters
-			if line.startswith('_cell_length_a'):
-				a = self._destringify( line.split()[1])
-			elif line.startswith('_cell_length_b'):
-				b = self._destringify( line.split()[1])
-			elif line.startswith('_cell_length_c'):
-				c = self._destringify( line.split()[1])
-			elif line.startswith('_cell_angle_alpha'):
-				aa = self._destringify( line.split()[1])
-			elif line.startswith('_cell_angle_beta'):
-				bb = self._destringify( line.split()[1])
-			elif line.startswith('_cell_angle_gamma'):
-				cc = self._destringify( line.split()[1])
-				print('unit cell:', a,b,c,aa,bb,cc)
-
-			# Find the atoms within the unit cell
-			elif (line.startswith("loop_") and ((lines[i+1].strip().startswith("_atom_site_label")) or 
-				lines[i+1].strip().startswith("_atom_site_type"))):
-				print("Importing atoms")
-				i+=1
-				line = lines[i]
-				
-				jj = 0   # index for keeping track of labels
-				while (line != " \r\n" and line != "\r\n" and line !='\n' and line.strip() != '' 
-						and line !=' \n' and line !='loop_\n' and not line.startswith('#')): #loop until we hit a blank spot
-					if '_atom' in line:
-						sitesymorder = None
-						if 'atom_site_fract_x' in line:
-							fract_x = jj
-						elif 'atom_site_fract_y' in line:
-							fract_y = jj
-						elif 'atom_site_fract_z' in line:
-							fract_z = jj
-						elif 'atom_site_occupancy' in line:
-							occ = jj
-						elif ('atom_site_site_symmetry_order' in line) or ('atom_site_symmetry_multipliticy' in line):
-							sitesymorder = jj
-						elif 'site_type_symbol' in line:
-							sitetypesymbol = jj
-						elif 'site_label' in line:
-							sitelabel = jj
-						i+=1
-						jj +=1
-					else:
-						if line.startswith('_'): break
-						site = line.split()#[0:9]
-						#print('site', site)
-						modsite = deepcopy(site)
-						if len(modsite) < 3:  # If the line for some reason spills over into the next...
-							i += 1
-							try:
-								line = lines[i]
-							except IndexError: break
-							continue
-						modsite[0] = site[sitelabel]
-						modsite[1] = site[sitetypesymbol]
-						modsite[2] = self._destringify(site[fract_x])
-						modsite[3] = self._destringify(site[fract_y])
-						modsite[4] = self._destringify(site[fract_z])
-						try:
-							modsite[7] = self._destringify(site[occ])
-						except IndexError:
-							modsite.extend([self._destringify(site[occ])] * (len(modsite)-5))
-						if sitesymorder != None:
-							modsite[8] = int(site[sitesymorder])
-						modsite.append(line.split()[-1])
-						# Move to middle of unit cell
-						for jj in range(2,5):
-							modsite[jj] -= int(modsite[jj])
-							if modsite[jj] < 0:
-								modsite[jj] += 1
-						sites.append(modsite)
-						i+=1
-					try:
-						line = lines[i]
-					except IndexError: break
-				i -=1
-
-			# Find the symmetry operations
-			elif (line.startswith("loop_") and 
-					(("_space_group_symop_id" in lines[i+1]
-							or "_space_group_symop_operation_xyz" in lines[i+1]
-							or "_symmetry_equiv_pos_site_id" in lines[i+1])
-							or "_symmetry_equiv_pos_as_xyz" in lines[i+1])):
-				while ('_' in line):  #jump ahead to where the symops are
-					i+=1
-					line = lines[i]
-				while (line != " \r\n" and line != "\r\n" and line != "\n" and line != " \n" 
-						and line != 'loop_\n' and line.strip() != ''): #loop until we hit a blank spot
-					if line.startswith('#'):
-						break
-					if '\'' in line:
-						quoteloc = [ii for ii, ltr in enumerate(line) if ltr == '\'']
-						symops.append(line[quoteloc[0]+1:quoteloc[1]])
-					else:
-						lnsplit = line.split(' ')
-						for ln in lnsplit:
-							if ',' in ln:  # Identify the symmetry operation by the presence of commas
-								symops.append(ln.strip())
-								break
-					i+=1
-					line = lines[i]
-				i -= 1
-			i+=1
-			
-		# print(symops)
-
-		if not sites:
-			# sites list is empty
-			# Without any atoms we can't do anything so this is a fatal error.
-			raise RuntimeError("No atomic sites were found when importing cif file")
-
-		if not symops:
-			# symops list is empy
-			# It may be that we don't have any symops (a supercell perhaps) so this is
-			# a warning rather than an error.
-			raise RuntimeWarning("No symmetry operations were found in the cif file")
-
-		self.asymunitcell = list(sites)
-		# Operate on asymmetric unit cell with all symops and then eliminate duplicates
-		self.MakeUnitCell(sites,symops)
-		self.symops = symops
-
-		# Define unit cell using lattice class
-		self.latt = lattice(a,b,c,aa,bb,cc)
-
-		print(".cif import complete.")
-
-	def SymOperate(self,symstring,atom):
-		"""operate on atom positions with symmetry operation"""
-		newatom = list(atom)
-		newpos = [0.0, 0.0, 0.0]
-		xpos, ypos, zpos = atom[2], atom[3], atom[4]
-		symstring = symstring.replace(' ','')
-		symstring = symstring.replace("x",str(xpos)).replace('y',str(ypos)).replace('z',str(zpos)).replace(
-								"X",str(xpos)).replace('Y',str(ypos)).replace('Z',str(zpos))
-		sym = symstring.split(",")
-		newpos[0] = self._defractionify(sym[0])
-		newpos[1] = self._defractionify(sym[1])
-		newpos[2] = self._defractionify(sym[2])
-		"""Translate the site back into the original unit cell"""
-		for i in range(len(newpos)):
-			if newpos[i] < -0.001:
-				newpos[i] +=1
-			if newpos[i] >= 1.00:
-				newpos[i] -=1
-
-		newatom[2:5] = newpos
-		return newatom
-
-	def MakeUnitCell(self,sites,symops):
-		unitcell = list(sites)
-		i = 0
-		for sy in symops:
-			for at in sites:
-				new_at = self.SymOperate(sy,at)
-				# Move inside unit cell
-				for jj in range(2,5):
-					new_at[jj] -= int(new_at[jj])
-					if new_at[jj] < 0:
-						new_at[jj] += 1
-
-				# test if new atom is in array already
-				if self._duplicaterow(new_at, unitcell):
-					# Test if new atom is outside the unit cell
-					unitcell.append(new_at)
-					i+=1
-		
-		## Eliminate all atoms outside the unit cell
-		self.unitcell = []
-		for at in unitcell:
-			if np.all(np.array(at[2:5])>=0):
-				if np.all(np.array(at[2:5])<=1):
-					self.unitcell.append(at)
-		print('  ', len(self.unitcell), "atoms added")
-		
-		# Now, create a dictionary with symmetry equivalent atoms and sites
-		atomnames = [auc[-1] for auc in self.asymunitcell]
-		#atomnames = [auc[-1] for auc in self.asymunitcell]
-		self.atomsunitcell = {}
-		for ii, an in enumerate(atomnames):
-			self.atomsunitcell[an] = []
-
-		for uc in self.unitcell:
-			self.atomsunitcell[uc[-1]].append(uc[2:5])
-		for ii, an in enumerate(atomnames):
-			self.atomsunitcell[an] = np.array(self.atomsunitcell[an])
-
-	def StructureFactor(self,scatlength,maxrlv):
-		"""Compute the nuclear structure factor.
-		Note that the output is dependent upon the input form of the scattering lengths.
-		If the lengths are pulled straight from the NCNR website, the structure factor
-		will be in units of (fm)^2/sr, not barns/sr """
-		# Make sure the input dictionary for scattering lengths is of the correct form
-		elmts = self._NumElements(self.asymunitcell)
-		try:
-			for el in elmts:
-				scatlength[el]
-		except LookupError as err:
-			print(err, "missing from 'scatlength' dictionary. Should contain "+ str(elmts)+"." +\
-				'To look up values, see  https://www.ncnr.nist.gov/resources/n-lengths/ ,  coh b ')
-			return 0
-
-		# Build numpy array of a,b,c, scattering length, and occupancy
-		atomlist = np.zeros((len(self.unitcell),5))
-		i=0
-		for a in self.unitcell:
-			atomlist[i] = np.array([a[2],a[3],a[4],scatlength[a[1]], a[7]])
-			i+=1
-
-		# Create array of reciprocal lattice vectors
-		taulim = np.arange(-maxrlv+1,maxrlv)
-		xx, yy, zz = np.meshgrid(taulim,taulim,taulim)
-		x = xx.flatten()
-		y = yy.flatten()
-		z = zz.flatten()
-		#array of reciprocal lattice vectors; 4th column will be structure factor^2
-		tau = np.array([x,y,z, np.zeros(len(x))]).transpose()  
-
-		# Compute structure factor, weighted by occupancy (have not added Debye Waller factor yet...)
-		i=0
-		for t in tau:
-			tau[i,3] = np.abs(np.sum(
-				atomlist[:,3]*atomlist[:,4]*
-				np.exp(2j*np.pi*np.inner(t[0:3],atomlist[:,0:3]))))**2
-			i+=1
-		# Eliminate tiny values
-		tau[:,3][tau[:,3] < 1e-16] = 0.0
-		self.SF = tau
-
-	def MultipleScattering(self, ei, peak, xcut,ycut, threshold=0.05,):
-
-		# Find the incident wavevector
-		k = self._kvector(ei)
-		xcutnorm = xcut.astype(float)/np.linalg.norm(xcut)
-		ycutnorm = ycut.astype(float)/np.linalg.norm(ycut)
-
-		# Compute multiple scattering
-		qvect = np.linalg.norm(self.latt.inverseA(vect = np.array(peak)))
-		thet = np.arcsin(qvect/2/k)
-
-		# put K_i in scattering plane defined by xcut and ycut in 
-		k_h = k*(np.dot(np.array([1,0,0]), xcutnorm)*np.sin(thet) + np.dot(np.array([1,0,0]) , ycutnorm)*np.cos(thet))
-		k_k = k*(np.dot(np.array([0,1,0]), xcutnorm)*np.sin(thet) + np.dot(np.array([0,1,0]) , ycutnorm)*np.cos(thet))
-		k_l = k*(np.dot(np.array([0,0,1]), xcutnorm)*np.sin(thet) + np.dot(np.array([0,0,1]) , ycutnorm)*np.cos(thet))
-
-		print(" Multiple scattering for", peak," peak, Ei =", ei,'meV:')
-		print("---------------------------------------------")
-		print("    dq \t \t intermediate peaks \t \t  SF^2")
-		for t1 in self.SF:
-			# Find length of scattering vector in inverse angstroms
-			t1A = self.latt.inverseA(vect = t1[0:3])
-			#calculate k-distance to tip of \vec{ki}
-			dq  = np.sqrt((t1A[0]-k_h)**2+(t1A[1]-k_k)**2+(t1A[2]-k_l)**2)-k 
-
-			if np.abs(dq) < threshold : 
-				for t2 in self.SF:
-					if np.array_equal((t2[0:3]+t1[0:3]), peak):
-						t2sf = t2[3]
-						t2pk = t2[0:3]
-						break
-				#netSF = t2sf * t1[3]
-				try: netSF = t2sf * t1[3]
-				except UnboundLocalError:
-					netSF = 0
-				
-				if ((netSF != 0.0) 
-					and not np.array_equal(t1[0:3], np.array([0,0,0])) 
-					and not np.array_equal(t2pk, np.array([0,0,0]))
-					and 1 > np.linalg.norm(t1[0:3])*2*np.pi/10./(2*k)
-					and 1 > np.linalg.norm(t2pk)*2*np.pi/10./(2*k)):
-
-					# report multiple multiple scattering match
-					print("   {0:.4f}\t".format(dq) ,t1[0:3], ' ', t2pk, '\t', netSF)
-
-	def _destringify(self,string):
-		"""automatically remove parenthesis from end of strings"""
-		if isinstance(string, str):
-			if '(' in string:
-				numb = float(string[:string.find("(")])
-			else: numb = float(string)
-
-			## Replace 0.3333 with 1/3, etc.
-			threshold = 5e-5
-			if np.abs(numb - 1/3) < threshold:
-				numb = 1/3
-			elif np.abs(numb - 2/3) < threshold:
-				numb = 2/3			
-			elif np.abs(numb - 1/6) < threshold:
-				numb = 1/6
-			return numb
-		else:   return string
-
-	def _defractionify(self,string):
-		"""convert string fraction to float"""
-		return eval(string)	
-
-	def _duplicaterow(self, row, array):
-		"""Determine whether a row exists in an array. Returns False if it does"""
-		value = False
-		for r in array:
-			if (#r[0] == row[0] and
-				r[1] == row[1] and
-				round(r[2] - row[2],3) == 0 and
-				round(r[3] - row[3],3) == 0 and
-				round(r[4] - row[4],3) == 0  ):
-
-				value = True
-		return not value
-
-	def _NumElements(self,sites):
-		"""returns an array of unique atoms in the unit cell"""
-		r = []
-		for s in sites:
-			r.append(s[1])
-		return list(set(r))
-
-	def _kvector(self,energy):
-		"""returns the wave vector of neutrons of a given energy"""
-		return 0.694693 * np.sqrt(energy)
-
-
-
-
-###############################################################################
-#Test with Yb2Ti2O7
-#YbTiO = CifFile("StoichiometricYbTiO.cif")
-#s_length = {'O2-': 5.803, 'Ti4+': -3.438, 'Yb3+': 12.43}
-#YbTiO.StructureFactor(s_length,5)
-#print(YbTiO.SF)
-#print(' ')
-#YbTiO.MultipleScattering(ei=1.0, threshold=0.1, peak = [0,0,2], xcut=np.array([1,1,1]), ycut = np.array([1,1,-2]))
-#print(' ')
-#YbTiO.MultipleScattering(ei=5, threshold=0.1, peak = [-4,2,2], xcut=np.array([1,-1,0]), ycut = np.array([1,1,-2]))
+# Example usage
+if __name__ == "__main__":
+    # Test with Yb2Ti2O7
+    crystal = CifFile("StoichiometricYbTiO.cif")
+    
+    # Define scattering lengths
+    s_length = {'O2-': 5.803, 'Ti4+': -3.438, 'Yb3+': 12.43}
+    
+    # Calculate structure factors
+    crystal.StructureFactor(s_length, 5)
+    print(f"\nCalculated {len(crystal.SF)} reflections")
+    
+    # Analyze multiple scattering
+    crystal.MultipleScattering(
+        ei=1.0, 
+        peak=[0, 0, 2],
+        xcut=np.array([1, 1, 1]),
+        ycut=np.array([1, 1, -2]),
+        threshold=0.1
+    )
