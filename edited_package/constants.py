@@ -174,8 +174,6 @@ def calculate_tesseral_harmonic(n: int, m: int, x: Union[float, np.ndarray],
     
     # Use a dispatch pattern based on (n, m) tuple
     value = _tesseral_dispatch(n, m, x, y, z, r, r_sq, r_cubed, r_4, r_6) 
-    
-    from . import TESSERAL_CONSTANTS # <- короче так будет, я хз как по-умному
 
     return TESSERAL_CONSTANTS[n][m] * value
 
@@ -545,8 +543,6 @@ def calculate_radial_integral_RE(ion,n):
     """Returns the radial integral of a rare earth ion plus self-shielding.
     Comes out in units of Bohr radius"""
 
-    from . import RADIAL_INTEGRALS_RARE_EARTH # <- короче так будет, я хз как по-умному
-
     if ion == 'U4+':
         U4r = {2: 2.042, 4: 7.632, 6: 47.774}  # from Freeman, Desclaux, Lander, and Faber, PRB (1976), Table I
         return U4r[n]
@@ -558,8 +554,6 @@ def calculate_radial_integral_RE(ion,n):
         return RADIAL_INTEGRALS_RARE_EARTH[ion][int(n/2-1) + 3] * shielding
 
 def calculate_radial_integral_TM(ion,n):
-
-    from . import RADIAL_INTEGRALS_TRANS_METAL  # <- короче так будет, я хз как по-умному
 
     """Returns the radial integral of a transition ion.
     The listed constants are in AA, so we convert to Bohr Radii"""
@@ -607,8 +601,6 @@ ION_NOT_HALF_FILLED = ['Ti2+','Ti3+',
 
 def is_half_filled(ion):
     '''determine if given ion has a half-filled shell or not.'''
-
-    from . import ION_HALF_FILLED, ION_NOT_HALF_FILLED  # <- короче так будет, я хз как по-умному
 
     if ion in ION_HALF_FILLED:
         return True
