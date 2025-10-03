@@ -1,4 +1,4 @@
-from edited_package.constants import theta, calculate_radial_integral_RE 
+from .constants import theta, calculate_radial_integral_RE 
 
 def rescaleCEF(ion1, ion2, B, n):
     '''Uses the point charge model to scale a CEF parameter (B)
