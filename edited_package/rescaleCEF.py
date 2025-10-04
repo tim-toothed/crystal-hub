@@ -3,7 +3,8 @@ from .constants import theta, calculate_radial_integral_RE
 # used outside the package
 
 def rescaleCEF(ion1, ion2, B, n):
-    '''Uses the point charge model to scale a CEF parameter (B)
+    '''
+    Uses the point charge model to scale a CEF parameter (B)
     from one ion to another. Assumes precisely the same ligand environment
     with a different magnetic ion thrown in.
     
