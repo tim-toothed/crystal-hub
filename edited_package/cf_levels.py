@@ -1,5 +1,6 @@
 import numpy as np
-from numba import jitclass, float64
+from numba import float64
+from numba.experimental import jitclass
 from scipy import optimize
 import scipy.linalg as LA
 from scipy.special import wofz
@@ -18,7 +19,7 @@ class CFLevels:
         self.H = np.sum([a*b for a,b in zip(StevensOperators, Parameters)], axis=0)
         self.O = StevensOperators  #save these for a fit
         self.B = Parameters
-        # self.Ci = B # Old definition of parameters
+        
         try:
             self.J = (len(self.H) -1.)/2
             self.opttran = opttransition(Operator.Jx(self.J).O, Operator.Jy(self.J).O.imag, Operator.Jz(self.J).O)
