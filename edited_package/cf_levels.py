@@ -7,33 +7,22 @@ from scipy.special import wofz
 from .constants import ION_NUMS_RARE_EARTH
 from .form_factors import RE_FormFactor
 from .create_fit_function import makeFitFunction
-from .operators import Ket, Operator, LSOperator
+from .fundamental_operators import Ket, Operator, LSOperator
 from .stevens_operators import StevensOp, LS_StevensOp
 
 
 class CFLevels:
     """For calculating and fitting crystal field levels for an ion"""
-    
     def __init__(self, StevensOperators, Parameters):
-        """Initialize crystal field Hamiltonian and optical transition calculator"""
-        # Create crystal field Hamiltonian
-        self.H = np.sum([a*b for a, b in zip(StevensOperators, Parameters)], axis=0)
-        self.O = StevensOperators  # Save Stevens operators for fitting
-        self.B = Parameters        # Save crystal field parameters
-        
+        """add Stevens operators to make a single hamiltonian matrix"""
+        self.H = np.sum([a*b for a,b in zip(StevensOperators, Parameters)], axis=0)
+        self.O = StevensOperators  #save these for a fit
+        self.B = Parameters
+        # self.Ci = B # Old definition of parameters
         try:
-            # Calculate total angular momentum quantum number
-            self.J = (len(self.H) - 1.0) / 2.0
-            
-            # Initialize optical transition calculator
-            self.opttran = OpticalTransition(
-                Operator.Jx(self.J).O,        # J_x matrix
-                Operator.Jy(self.J).O.imag,   # J_y matrix (real part)
-                Operator.Jz(self.J).O         # J_z matrix
-            )
-        except (TypeError, AttributeError):
-            # Handle cases where J cannot be determined
-            pass
+            self.J = (len(self.H) -1.)/2
+            self.opttran = opttransition(Operator.Jx(self.J).O, Operator.Jy(self.J).O.imag, Operator.Jz(self.J).O)
+        except TypeError: pass
 
     @classmethod
     def Bdict(cls, ion, Bdict):
@@ -56,8 +45,9 @@ class CFLevels:
         newcls = cls([0,0],[0,0])  # Create empty class so we can just define Hamiltonian
         newcls.H = Hamil
         newcls.J = (len(Hamil) -1.)/2
-        newcls.opttran = OpticalTransition(Operator.Jx(newcls.J).O.real, Operator.Jy(newcls.J).O.imag, Operator.Jz(newcls.J).O.real)
+        newcls.opttran = opttransition(Operator.Jx(newcls.J).O.real, Operator.Jy(newcls.J).O.imag, Operator.Jz(newcls.J).O.real)
         return newcls
+
 
     def newCoeff(self, newcoeff):
         self.B = np.array(newcoeff)
@@ -84,6 +74,7 @@ class CFLevels:
         tol = 1e-15
         self.eigenvalues[abs(self.eigenvalues) < tol] = 0.0
         self.eigenvectors[abs(self.eigenvectors) < tol] = 0.0
+
 
     def diagonalize_banded(self, Hamiltonian=None):
         '''same as above, but using the Scipy eig_banded function'''
@@ -116,6 +107,9 @@ class CFLevels:
                 nonzerobands = i
         return diags[:nonzerobands+1]
 
+
+
+
     def transitionIntensity(self, ii, jj, Temp):
         # for population factor weights
         beta = 1/(8.61733e-2*Temp)  # Boltzmann constant is in meV/K
@@ -126,6 +120,7 @@ class CFLevels:
         # compute amplitude
         mJn = self.opttran.transition(self.eigenvectors.real[ii] ,  self.eigenvectors.real[jj])
         return pn*mJn
+
 
     def neutronSpectrum(self, Earray, Temp, Ei, ResFunc, gamma = 0):
         # make angular momentum ket object
@@ -169,6 +164,7 @@ class CFLevels:
         kpoverk = np.sqrt((Ei - Earray)/Ei) #k'/k = sqrt(E'/E)
         return intensity * kpoverk
 
+
     def neutronSpectrum_customLineshape(self, Earray, Temp, Ei, LineshapeFunc):
         '''calculate neutron spectrum with a custom lineshape
         which is a function of energy list and energy transfer.'''
@@ -202,6 +198,7 @@ class CFLevels:
         kpoverk = np.sqrt((Ei - Earray)/Ei) #k'/k = sqrt(E'/E)
         return intensity * kpoverk
 
+
     def normalizedNeutronSpectrum(self, Earray, Temp, ResFunc, gamma = 0):
         '''1D neutron spectrum without the Kf/Ki correction'''
         # make angular momentum ket object
@@ -232,6 +229,7 @@ class CFLevels:
                                                         gamma=gamma)).real).astype('float64')
         return intensity
 
+
     def normalizedNeutronSpectrum_customLineshape(self, Earray, Temp, LineshapeFunc):
         '''1D neutron spectrum without the Kf/Ki correction.
         LineshapeFunc must be a function with arguments of energy list and 
@@ -261,6 +259,8 @@ class CFLevels:
                                                             deltaE)).real).astype('float64')
         return intensity
 
+
+
     def neutronSpectrum2D(self, Earray, Qarray, Temp, Ei, ResFunc, gamma, Ion, DebyeWaller=0):
         intensity1D = self.neutronSpectrum(Earray, Temp, Ei, ResFunc,  gamma)
 
@@ -278,6 +278,7 @@ class CFLevels:
         # Scale by form factor
         FormFactor = RE_FormFactor(Qarray,Ion)
         return np.outer(intensity1D, DWF*FormFactor)
+
 
     def _transition(self,ket1,ket2):  ## Correct, but slow.
         """Computes \sum_a |<|J_a|>|^2"""
@@ -380,6 +381,7 @@ class CFLevels:
             print('  <J_x> =',jjxx,'\t<J_y> =',jjyy,'\t<J_z> =',jjzz)
         print(' ')
 
+
     def magnetization(self, ion, Temp, Field):
         '''field should be a 3-component vector. Temps may be an array.
         Returns a three-component vector [M_x, M_y, M_z].
@@ -441,6 +443,7 @@ class CFLevels:
             #     print np.exp(-expvals/temps/k_B)[0]
             #     raise ValueError('Nan in result!')
             return np.nan_to_num(gJ*JexpValList.T)
+
 
     def susceptibility(self, ion, Temps, Field, deltaField):
         '''Computes susceptibility numerically with a numerical derivative.
@@ -532,6 +535,7 @@ class CFLevels:
                                     np.real((kev2*kev.Jz()) * (kev*kev2.Jz()))])
         return gJ*gJ*muB*suscept
 
+
     def gtensor(self):
         '''Returns g tensor computed numerically'''
 
@@ -587,6 +591,7 @@ class CFLevels:
                          [np.real(jz01), np.imag(jz01), np.abs(jz00)]])
         return gg*LandeGFactor(self.ion)
 
+
     def gtensorzeeman(self, field=0.1, Temp=0.1):
          '''Returns g tensor computed numerically from zeeman splitting'''
          Jx = Operator.Jx(self.J)
@@ -633,6 +638,7 @@ class CFLevels:
             
          return gg
 
+
     def fitdata(self, chisqfunc, fitargs, method='Powell', **kwargs):
         '''fits data to CEF parameters'''
 
@@ -677,6 +683,7 @@ class CFLevels:
         result['Chisq'] = finalChisq
         return result
 
+
     def testEigenvectors(self):
         """Tests if eigenvectors are really eigenvectors"""
         print('testing eigenvectors... (look for large values)')
@@ -691,6 +698,7 @@ class CFLevels:
             TotalTransition += self._transition(Ket(self.eigenvectors[1]),Ket(ev))
         print(TotalTransition, '  ', self.J*(self.J+1))
 
+
 ###################################
 ### Inner functions for CFLevels class
 ###################################
@@ -699,64 +707,33 @@ class CFLevels:
 Numba-optimized class for calculating optical transition probabilities.
 """
 
-# Specification for Numba jitclass - defines the data types
-_spec = [ 
-    ('Jx', float64[:,:]),  # J_x operator matrix
-    ('Jy', float64[:,:]),  # J_y operator matrix
-    ('Jz', float64[:,:])   # J_z operator matrix
+# from numba import njit, jitclass
+from numba import float64 #, complex128
+
+import warnings
+warnings.filterwarnings('ignore')
+
+spec = [ 
+    ('Jx', float64[:,:]),          # an array field
+    ('Jy', float64[:,:]),
+    ('Jz', float64[:,:])
 ]
 
-@jitclass(_spec)
-class OpticalTransition:
-    """
-    Numba-optimized class for calculating transition probabilities between 
-    quantum states using angular momentum operators.
-    
-    Attributes:
-        Jx (ndarray): x-component angular momentum operator matrix
-        Jy (ndarray): y-component angular momentum operator matrix  
-        Jz (ndarray): z-component angular momentum operator matrix
-    """
-    
-    def __init__(self, Jx_matrix, Jy_matrix, Jz_matrix):
-        """
-        Initialize with angular momentum operator matrices.
-        
-        Args:
-            Jx_matrix (ndarray): Matrix representation of J_x operator
-            Jy_matrix (ndarray): Matrix representation of J_y operator
-            Jz_matrix (ndarray): Matrix representation of J_z operator
-        """
-        self.Jx = Jx_matrix
-        self.Jy = Jy_matrix
-        self.Jz = Jz_matrix
+@jitclass(spec)
+class opttransition(object):
+    def __init__(self, optJx, optJy, optJz):
+        self.Jx = np.zeros((len(optJx),len(optJx)), dtype=np.float64)
+        self.Jy = np.zeros((len(optJx),len(optJx)), dtype=np.float64)
+        self.Jz = np.zeros((len(optJx),len(optJx)), dtype=np.float64)
+        self.Jx = optJx
+        self.Jy = optJy
+        self.Jz = optJz
 
-    def transition_strength(self, bra_state, ket_state):
-        """
-        Calculate the total transition strength between two quantum states.
-        
-        The transition strength is proportional to |<bra|J|ket>|², summed over
-        all three spatial components (x, y, z).
-        
-        Args:
-            bra_state (ndarray): Bra vector (complex conjugate of final state)
-            ket_state (ndarray): Ket vector (initial state)
-            
-        Returns:
-            float: Total transition strength between the two states
-        """
-        # Calculate matrix elements for each component
-        Jx_element = np.dot(bra_state, np.dot(self.Jx, ket_state))
-        Jy_element = np.dot(bra_state, np.dot(self.Jy, ket_state)) 
-        Jz_element = np.dot(bra_state, np.dot(self.Jz, ket_state))
-        
-        # Sum squared magnitudes for total transition strength
-        return (np.abs(Jx_element)**2 + 
-                np.abs(Jy_element)**2 + 
-                np.abs(Jz_element)**2)
-
-    # Alias for backward compatibility
-    transition = transition_strength
+    def transition(self,ket1, ket2):
+        ax = np.dot(ket1, np.dot(self.Jx, ket2))**2
+        ay = np.dot(ket1, np.dot(self.Jy, ket2))**2
+        az = np.dot(ket1, np.dot(self.Jz, ket2))**2
+        return ax + ay + az
 
 """
 LandeGFactor Function
@@ -873,6 +850,7 @@ class LS_CFLevels:
         newH = np.sum([a*b for a,b in zip(self.O, newcoeff)], axis=0)
         self.diagonalize(newH)
 
+
     def diagonalize(self, CEF_Hamiltonian=None):
         '''same as above, but using the Scipy eig_banded function'''
         if CEF_Hamiltonian is None:
@@ -904,6 +882,8 @@ class LS_CFLevels:
             if np.count_nonzero(np.around(diag,10)) > 0:
                 nonzerobands = i
         return diags[:nonzerobands+1]
+
+
 
     def neutronSpectrum(self, Earray, Temp, Ei, ResFunc, gamma = 0):
         try:
@@ -941,6 +921,7 @@ class LS_CFLevels:
         kpoverk = np.sqrt((Ei - Earray)/Ei) #k'/k = sqrt(E'/E)
         return intensity * kpoverk
 
+
     # Shared
     def neutronSpectrum2D(self, Earray, Qarray, Temp, Ei, ResFunc, gamma, DebyeWaller, Ion):
         intensity1D = self.neutronSpectrum(Earray, Temp, Ei, ResFunc,  gamma)
@@ -950,6 +931,7 @@ class LS_CFLevels:
         # Scale by form factor
         FormFactor = RE_FormFactor(Qarray,Ion)
         return np.outer(intensity1D, DWF*FormFactor)
+
 
     def normalizedNeutronSpectrum(self, Earray, Temp, ResFunc, gamma = 0):
         '''neutron spectrum without the ki/Kf correction'''
@@ -983,6 +965,7 @@ class LS_CFLevels:
                                                     gamma=gamma)).real).astype('float64')
                 #intensity += ((pn * mJn * self._lorentzian(Earray, deltaE, Width)).real).astype('float64')
         return intensity
+
 
     def _transition(self,ket1,ket2):
         """Computes \sum_a |<|J_a|>|^2 = \sum_a |<|L_a + S_a|>|^2"""
@@ -1021,7 +1004,6 @@ class LS_CFLevels:
         sigma = (0.5*alpha) / np.sqrt(2 * np.log(2))
         return np.real(wofz(((x-x0) + 1j*(0.5*gamma))/sigma/np.sqrt(2))) / sigma\
                                                             /np.sqrt(2*np.pi)
-    
     # Shared
     def _Re(self,value):
         thresh = 1e-9
@@ -1063,6 +1045,7 @@ class LS_CFLevels:
             jjzz = self._Re(np.dot(ev,np.dot(self.Jzg0.O,ev)))
             print('  <J_x> =',jjxx,'\t<J_y> =',jjyy,'\t<J_z> =',jjzz)
         print(' ')
+
 
     def magnetization(self, Temp, Field):
         '''field should be a 3-component vector. Temps may be an array.'''
@@ -1108,6 +1091,7 @@ class LS_CFLevels:
             #     print np.exp(-expvals/temps/k_B)[0]
             #     raise ValueError('Nan in result!')
             return np.nan_to_num(JexpValList.T)
+
 
     def susceptibility(self, Temps, Field, deltaField):
         '''Computes susceptibility numerically with a numerical derivative.
@@ -1273,6 +1257,9 @@ class LS_CFLevels:
             #     raise ValueError('Nan in result!')
             return np.nan_to_num(MagList.T) / muB
 
+
+
+
     def gtensor(self):
         '''Returns g tensor computed numerically'''
         def eliminateimag(number):
@@ -1367,6 +1354,7 @@ class LS_CFLevels:
 
          return gtens
 
+
     def fitdata(self, chisqfunc, fitargs, method='Powell', **kwargs):
         '''fits data to CEF parameters'''
 
@@ -1394,6 +1382,7 @@ class LS_CFLevels:
         #print '\nFinal values: ', result
         result['Chisq'] = finalChisq
         return result
+
 
     def printLaTexEigenvectors(self):
         '''prints eigenvectors and eigenvalues in the output that Latex can read'''
