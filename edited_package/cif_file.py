@@ -1,3 +1,18 @@
+"""
+CIF file parser and crystallographic structure manipulation.
+
+Reads Crystallographic Information Files (CIF) and constructs unit cells by
+applying space group symmetry operations to asymmetric units. Provides nuclear
+structure factor calculations and multiple scattering analysis for neutron
+diffraction experiments.
+
+Key capabilities:
+- Parse CIF format (lattice parameters, atomic positions, symmetry operations)
+- Generate full unit cell from asymmetric unit via symmetry expansion
+- Calculate nuclear structure factors for Bragg peaks
+- Identify multiple scattering pathways in neutron experiments
+"""
+
 import numpy as np
 from copy import deepcopy
 
@@ -5,8 +20,33 @@ from .lattice_class import lattice
 
 
 class CifFile:
-	"""for importing .cif files into python"""
+	"""
+	CIF file parser with crystallographic operations.
+
+	Imports atomic coordinates, lattice parameters, and space group symmetry
+	from CIF files. Automatically generates complete unit cell and provides
+	tools for neutron scattering calculations.
+
+	Attributes:
+		asymunitcell: List of atoms in asymmetric unit [label, type, x, y, z, ...]
+		unitcell: Full unit cell after symmetry operations applied
+		symops: List of symmetry operation strings (e.g., 'x,y,z', '-x,-y,z')
+		latt: Lattice object for coordinate transformations
+		atomsunitcell: Dict mapping atom names to position arrays
+		SF: Structure factor array [h, k, l, |F|²] (after StructureFactor call)
+	"""
+
 	def __init__(self,infile):
+		"""
+		Parse CIF file and construct unit cell.
+
+		Args:
+		    infile: Path to .cif file
+
+		Raises:
+		    RuntimeError: If no atomic sites found
+		    RuntimeWarning: If no symmetry operations found
+		"""
 
 		f = open(infile)
 		lines = f.readlines()
@@ -154,7 +194,17 @@ class CifFile:
 		print(".cif import complete.")
 
 	def SymOperate(self,symstring,atom):
-		"""operate on atom positions with symmetry operation"""
+		"""
+		Apply symmetry operation to atomic position.
+
+		Args:
+		    symstring: Operation like 'x,y,z' or '-x+1/2,y,-z'
+		    atom: Atom list [label, type, x, y, z, ...]
+
+		Returns:
+		    list: New atom with transformed coordinates, wrapped to [0,1)
+		"""
+
 		newatom = list(atom)
 		newpos = [0.0, 0.0, 0.0]
 		xpos, ypos, zpos = atom[2], atom[3], atom[4]
@@ -176,6 +226,21 @@ class CifFile:
 		return newatom
 
 	def MakeUnitCell(self,sites,symops):
+		"""
+		Generate full unit cell from asymmetric unit.
+
+		Applies all symmetry operations to asymmetric unit atoms,
+		eliminates duplicates, and wraps positions into unit cell.
+
+		Args:
+			sites: Asymmetric unit atom list
+			symops: List of symmetry operation strings
+
+		Sets:
+        	self.unitcell: Complete list of symmetry-equivalent atoms
+			self.atomsunitcell: Dictionary of positions grouped by site
+		"""
+		
 		unitcell = list(sites)
 		i = 0
 		for sy in symops:
@@ -214,10 +279,25 @@ class CifFile:
 			self.atomsunitcell[an] = np.array(self.atomsunitcell[an])
 
 	def StructureFactor(self,scatlength,maxrlv):
-		"""Compute the nuclear structure factor.
-		Note that the output is dependent upon the input form of the scattering lengths.
-		If the lengths are pulled straight from the NCNR website, the structure factor
-		will be in units of (fm)^2/sr, not barns/sr """
+		"""
+		Calculate nuclear structure factors for Bragg reflections.
+
+		Computes |F(hkl)|² = |Σ b_j·n_j·exp(2πi·Q·r_j)|² for all
+		reciprocal lattice vectors within ±maxrlv.
+
+		Args:
+			scatlength: Dict mapping ion types to coherent scattering lengths (fm)
+				Example: {'O2-': 5.803, 'Yb3+': 12.43}
+			maxrlv: Maximum Miller index to compute
+
+		Sets:
+			self.SF: Array of [h, k, l, |F|²] for all reflections
+
+		Note:
+			Output units match input (fm²/sr if using NCNR values).
+			Does not include Debye-Waller factors.
+		"""
+
 		# Make sure the input dictionary for scattering lengths is of the correct form
 		elmts = self._NumElements(self.asymunitcell)
 		try:
@@ -256,7 +336,25 @@ class CifFile:
 		self.SF = tau
 
 	def MultipleScattering(self, ei, peak, xcut,ycut, threshold=0.05,):
+		"""
+		Identify multiple scattering paths to given Bragg peak.
 
+		Finds intermediate reflections τ₁, τ₂ where τ₁ + τ₂ = peak
+		and |k_i - τ₁| ≈ k (energy conservation). Used to identify
+		spurious peaks in neutron scattering experiments.
+
+		Args:
+			ei: Incident neutron energy (meV)
+			peak: Target reflection [h, k, l]
+			xcut, ycut: Scattering plane basis vectors (defines k_i orientation)
+			threshold: Maximum |Δk| for matches (Å⁻¹)
+
+		Prints:
+			Table of [Δk, τ₁, τ₂, SF₁·SF₂] for detected pathways
+
+		Note:
+			Requires StructureFactor() called first to set self.SF
+		"""
 		# Find the incident wavevector
 		k = self._kvector(ei)
 		xcutnorm = xcut.astype(float)/np.linalg.norm(xcut)
@@ -301,7 +399,12 @@ class CifFile:
 					print("   {0:.4f}\t".format(dq) ,t1[0:3], ' ', t2pk, '\t', netSF)
 
 	def _destringify(self,string):
-		"""automatically remove parenthesis from end of strings"""
+		"""
+		Parse CIF numeric strings, removing uncertainties.
+
+		'1.234(5)' → 1.234, also recognizes common fractions.
+		"""
+
 		if isinstance(string, str):
 			if '(' in string:
 				numb = float(string[:string.find("(")])
@@ -319,11 +422,16 @@ class CifFile:
 		else:   return string
 
 	def _defractionify(self,string):
-		"""convert string fraction to float"""
+		"""Convert fraction strings to float via eval ('1/3' → 0.333...)."""
 		return eval(string)	
 
 	def _duplicaterow(self, row, array):
-		"""Determine whether a row exists in an array. Returns False if it does"""
+		"""
+		Check if atom already exists in array (within 0.001 tolerance).
+
+		Returns:
+			bool: True if unique (not duplicate), False if duplicate
+		"""
 		value = False
 		for r in array:
 			if (r[1] == row[1] and
@@ -336,14 +444,22 @@ class CifFile:
 		return not value
 
 	def _NumElements(self,sites):
-		"""returns an array of unique atoms in the unit cell"""
+		"""Extract unique element types from site list."""
 		r = []
 		for s in sites:
 			r.append(s[1])
 		return list(set(r))
 
 	def _kvector(self,energy):
-		"""returns the wave vector of neutrons of a given energy"""
+		"""
+		Calculate neutron wavevector from energy.
+
+		Args:
+			energy: Neutron energy (meV)
+
+		Returns:
+			float: |k| = 0.694693·√E (Å⁻¹)
+		"""
 		return 0.694693 * np.sqrt(energy)
 
 

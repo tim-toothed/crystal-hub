@@ -40,6 +40,9 @@ Note:
 import numpy as np
 import scipy.linalg as LA
 
+# used inside the package
+# used outside the package
+
 class Ket():
     """
     Represents a quantum state (ket) in angular momentum basis.

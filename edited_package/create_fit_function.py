@@ -49,8 +49,8 @@ def makeFitFunction(function, fitargs, **kwargs):
 
 	# E) Create function which splits the result back into variables
 	def resultfunc(x):
-	 	return {fa : x[lengths[i][0]: lengths[i][1]] for i, fa in enumerate(fitargs)}
-
+		return {fa : x[lengths[i][0]: lengths[i][1]] for i, fa in enumerate(fitargs)}
+	
 	return fitfunc, p0, resultfunc
 
 
@@ -104,7 +104,7 @@ def makeCurveFitFunction(function, fitargs, **kwargs):
 
 	# E) Create function which splits the result back into variables
 	def resultfunc(x):
-	 	return {fa[:-1] : x[lengths[i][0]: lengths[i][1]] 
+		return {fa[:-1] : x[lengths[i][0]: lengths[i][1]] 
 	 			if (lengths[i][1]-lengths[i][0]) > 1 else x[lengths[i][0]]
 	 			for i, fa in enumerate(fitargs)}
 

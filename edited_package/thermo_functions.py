@@ -1,12 +1,34 @@
 import numpy as np
 from .constants import k_B
 
-# Heat capacity from Victor Porée
+# used outside the package
+
 def partition_func(Eis,T):
-    # partition function
+    """
+    Calculates the partition function Z(T) for a quantum system
+
+    Args:
+        Eis: Energy eigenvalues (array) in meV
+        T: Temperature (float or array) in Kelvin
+
+    Returns:
+        Partition function value: Z = Σ exp(-Eᵢ/kᵦT)
+    """
+
     return np.sum(np.exp(-Eis/(k_B*T)))
 
 def Cp_from_CEF(Eis,T):
+    """
+    Calculates molar heat capacity from crystal field energy levels
+
+    Args:
+        Eis: Energy eigenvalues (array) in meV
+        T: Temperature array in Kelvin
+
+    Returns:
+        Heat capacity array Cₚ(T) in J/(K·mol)
+    """
+    
     def Cp1T(t):
         R = 8.31432  # in J/K per mol
         beta = k_B * t

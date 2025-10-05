@@ -1,6 +1,28 @@
-import numpy as np
+"""
+Crystallographic symmetry analysis and ligand environment detection from CIF files.
 
-from .plot_ligands import plotPCF
+Analyzes point group symmetry operations around magnetic ions, identifies coordination
+geometries, and establishes local coordinate systems for crystal field calculations.
+Handles automatic axis selection via symmetry detection or moment of inertia analysis.
+
+Key workflow:
+    1. Locate magnetic ion in asymmetric unit
+    2. Apply symmetry operations to generate full coordination sphere
+    3. Identify nearest neighbor ligands by distance/type
+    4. Detect rotational axes and mirror planes
+    5. Establish orthogonal XYZ basis aligned with symmetry
+    6. Transform ligand positions to local coordinates
+
+Symmetry detection priority:
+    - Highest-fold rotation → Z-axis
+    - Mirror plane ⊥ rotation → Y-axis
+    - Fallback: moment of inertia tensor
+"""
+
+import numpy as np
+import matplotlib.pyplot as plt
+
+from .plotPCF import plotPCF
 from .moments_of_inertia import findZaxis
 
 
@@ -404,3 +426,4 @@ def makeSymOpMatrix(cif_file, symop):
             elif c == 'z':
                 matrix[i] += multfact * np.array([0, 0, 1])
     return matrix
+

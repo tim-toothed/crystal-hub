@@ -1,10 +1,42 @@
-import numpy as np
-from .operators import Operator
+"""
+Stevens operator equivalent matrices for crystal field calculations.
 
+Provides Stevens operator O_n^m matrices constructed from angular momentum operators.
+These are the basis operators for expanding crystal field Hamiltonians in rare earth
+and transition metal systems.
+
+Functions:
+    StevensOp(J, n, m): Generate Stevens operator O_n^m for J-basis (rare earths)
+    LS_StevensOp(L, S, n, m): Generate Stevens operator for LS-coupling basis (transition metals)
+
+Stevens operators are polynomial combinations of Jz, J+, J- that transform as
+spherical harmonics under rotation. They satisfy:
+    - Hermiticity
+    - Time-reversal symmetry: O_n^(-m) = (-1)^m (O_n^m)†
+    - Tesseral form (real linear combinations)
+
+Supported ranks: n = 0, 1, 2, 3, 4, 6 (crystal field requires n ≤ 6)
+Orders: m = -n to +n
+
+Example:
+    >>> O20 = StevensOp(J=3.5, n=2, m=0)  # Quadrupole operator for Yb3+
+    >>> O44 = StevensOp(J=7.5, n=4, m=4)  # Hexadecapole for Dy3+
+
+References:
+    - M.T. Hutchings, Solid State Physics 16, 227 (1964)
+    - K.W.H. Stevens, Proc. Phys. Soc. A 65, 209 (1952)
+"""
+
+import numpy as np
+from .fundamental_operators import Operator
+
+# used inside the package
 
 def StevensOp(J,n,m):
-    """generate stevens operator for a given total angular momentum
-    and a given n and m state"""
+    """
+    Generate stevens operator for a given total angular momentum
+    and a given n and m state
+    """
     Jz = Operator.Jz(J=J)
     Jp = Operator.Jplus(J=J)
     Jm = Operator.Jminus(J=J)
@@ -106,6 +138,3 @@ def LS_StevensOp(L,S,n,m):
 
     fullmatrix = np.hstack(np.hstack(np.multiply.outer(lmatrix, np.identity(int(2*S+1)))))
     return fullmatrix
-
-
-
