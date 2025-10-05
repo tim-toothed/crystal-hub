@@ -1,6 +1,6 @@
 # 📊 Python Package Dependency Analysis Report
 
-**Generated:** 2025-10-05 02:16:21
+**Generated:** 2025-10-05 03:05:38
 
 **Package:** `edited_package`
 
@@ -434,77 +434,77 @@
 
 ### 🏛️ Classes
 
-#### **CifFile** *(line 7)*
+#### **CifFile** *(line 22)*
 
 - **Used by:** 4 files
 
 
 **Methods:**
 
-- `__init__()` *(line 9)* - 0 usages
-- `SymOperate()` *(line 156)* - 2 usages
+- `__init__()` *(line 39)* - 0 usages
+- `SymOperate()` *(line 196)* - 2 usages
   <details><summary>View usages</summary>
 
-  - `cif_file.py`: class:CifFile → method:MakeUnitCell (line 183)
-  - `cif_symmetry_import.py`: function:FindPointGroupSymOps (line 48)
+  - `cif_file.py`: class:CifFile → method:MakeUnitCell (line 248)
+  - `cif_symmetry_import.py`: function:FindPointGroupSymOps (line 69)
   </details>
 
-- `MakeUnitCell()` *(line 178)* - 1 usages
+- `MakeUnitCell()` *(line 228)* - 1 usages
   <details><summary>View usages</summary>
 
-  - `cif_file.py`: class:CifFile → method:__init__ (line 148)
+  - `cif_file.py`: class:CifFile → method:__init__ (line 188)
   </details>
 
-- `StructureFactor()` *(line 216)* - 0 usages
-- `MultipleScattering()` *(line 258)* - 0 usages
-- `_destringify()` *(line 303)* - 11 usages
+- `StructureFactor()` *(line 281)* - 0 usages
+- `MultipleScattering()` *(line 338)* - 0 usages
+- `_destringify()` *(line 401)* - 11 usages
   <details><summary>View all 11 usages</summary>
 
-  - `cif_file.py`: class:CifFile → method:__init__ (line 30)
-  - `cif_file.py`: class:CifFile → method:__init__ (line 32)
-  - `cif_file.py`: class:CifFile → method:__init__ (line 34)
-  - `cif_file.py`: class:CifFile → method:__init__ (line 36)
-  - `cif_file.py`: class:CifFile → method:__init__ (line 38)
-  - `cif_file.py`: class:CifFile → method:__init__ (line 40)
-  - `cif_file.py`: class:CifFile → method:__init__ (line 84)
-  - `cif_file.py`: class:CifFile → method:__init__ (line 85)
-  - `cif_file.py`: class:CifFile → method:__init__ (line 86)
-  - `cif_file.py`: class:CifFile → method:__init__ (line 88)
-  - `cif_file.py`: class:CifFile → method:__init__ (line 90)
+  - `cif_file.py`: class:CifFile → method:__init__ (line 70)
+  - `cif_file.py`: class:CifFile → method:__init__ (line 72)
+  - `cif_file.py`: class:CifFile → method:__init__ (line 74)
+  - `cif_file.py`: class:CifFile → method:__init__ (line 76)
+  - `cif_file.py`: class:CifFile → method:__init__ (line 78)
+  - `cif_file.py`: class:CifFile → method:__init__ (line 80)
+  - `cif_file.py`: class:CifFile → method:__init__ (line 124)
+  - `cif_file.py`: class:CifFile → method:__init__ (line 125)
+  - `cif_file.py`: class:CifFile → method:__init__ (line 126)
+  - `cif_file.py`: class:CifFile → method:__init__ (line 128)
+  - `cif_file.py`: class:CifFile → method:__init__ (line 130)
   </details>
 
-- `_defractionify()` *(line 321)* - 3 usages
+- `_defractionify()` *(line 424)* - 3 usages
   <details><summary>View usages</summary>
 
-  - `cif_file.py`: class:CifFile → method:SymOperate (line 165)
-  - `cif_file.py`: class:CifFile → method:SymOperate (line 166)
-  - `cif_file.py`: class:CifFile → method:SymOperate (line 167)
+  - `cif_file.py`: class:CifFile → method:SymOperate (line 215)
+  - `cif_file.py`: class:CifFile → method:SymOperate (line 216)
+  - `cif_file.py`: class:CifFile → method:SymOperate (line 217)
   </details>
 
-- `_duplicaterow()` *(line 325)* - 1 usages
+- `_duplicaterow()` *(line 428)* - 1 usages
   <details><summary>View usages</summary>
 
-  - `cif_file.py`: class:CifFile → method:MakeUnitCell (line 191)
+  - `cif_file.py`: class:CifFile → method:MakeUnitCell (line 256)
   </details>
 
-- `_NumElements()` *(line 338)* - 1 usages
+- `_NumElements()` *(line 446)* - 1 usages
   <details><summary>View usages</summary>
 
-  - `cif_file.py`: class:CifFile → method:StructureFactor (line 222)
+  - `cif_file.py`: class:CifFile → method:StructureFactor (line 302)
   </details>
 
-- `_kvector()` *(line 345)* - 1 usages
+- `_kvector()` *(line 453)* - 1 usages
   <details><summary>View usages</summary>
 
-  - `cif_file.py`: class:CifFile → method:MultipleScattering (line 261)
+  - `cif_file.py`: class:CifFile → method:MultipleScattering (line 359)
   </details>
 
 
 <details><summary>📍 View all 4 class usages</summary>
 
-- `import_CIF.py`: import-statement (line 5)
-- `import_CIF.py`: function:importCIF (line 33)
-- `import_CIF.py`: function:importCIF (line 33)
+- `import_CIF.py`: import-statement (line 22)
+- `import_CIF.py`: function:importCIF (line 73)
+- `import_CIF.py`: function:importCIF (line 73)
 - `__init__.py`: import-statement (line 10)
 </details>
 
@@ -514,22 +514,22 @@
 
 ### 📊 Functions
 
-#### **FindPointGroupSymOps()** *(line 8)*
+#### **FindPointGroupSymOps()** *(line 29)*
 
 - **Used by:** 3 files
 
 <details><summary>View all 3 usages</summary>
 
-- `import_CIF.py`: import-statement (line 4)
-- `import_CIF.py`: function:importCIF (line 80)
-- `import_CIF.py`: function:importCIF (line 80)
+- `import_CIF.py`: import-statement (line 21)
+- `import_CIF.py`: function:importCIF (line 121)
+- `import_CIF.py`: function:importCIF (line 121)
 </details>
 
-#### **findRotationAxis()** *(line 332)*
+#### **findRotationAxis()** *(line 353)*
 
 - **Used by:** 0 file
 
-#### **makeSymOpMatrix()** *(line 382)*
+#### **makeSymOpMatrix()** *(line 403)*
 
 - **Used by:** 0 file
 
@@ -630,13 +630,13 @@
 - `ligands.py`: import-statement (line 24)
 - `ligands.py`: class:Ligands → method:PointChargeModel (line 258)
 - `ligands.py`: class:Ligands → method:PointChargeModel (line 258)
-- `moments_of_inertia.py`: function:anglesToVector (line 53)
-- `moments_of_inertia.py`: function:anglesToVector (line 53)
-- `moments_of_inertia.py`: function:anglesToVector (line 53)
-- `moments_of_inertia.py`: function:rotationMatrix (line 58)
-- `moments_of_inertia.py`: function:rotateArbAxis (line 73)
-- `moments_of_inertia.py`: function:fitfun (line 84)
-- `moments_of_inertia.py`: function:fitfun (line 85)
+- `moments_of_inertia.py`: function:anglesToVector (line 158)
+- `moments_of_inertia.py`: function:anglesToVector (line 158)
+- `moments_of_inertia.py`: function:anglesToVector (line 158)
+- `moments_of_inertia.py`: function:rotationMatrix (line 175)
+- `moments_of_inertia.py`: function:rotateArbAxis (line 201)
+- `moments_of_inertia.py`: function:fitfun (line 225)
+- `moments_of_inertia.py`: function:fitfun (line 226)
 - `plotPCF.py`: class:atomplot → method:__init__ (line 74)
 - `plotPCF.py`: class:atomplot → method:__init__ (line 74)
 - `plotPCF.py`: class:atomplot → method:__init__ (line 77)
@@ -700,10 +700,10 @@
   - `cf_levels.py`: import-statement (line 8)
   - `cf_levels.py`: class:CFLevels → method:Bdict (line 30)
   - `cf_levels.py`: function:LandeGFactor (line 754)
-  - `form_factors.py`: import-statement (line 2)
-  - `form_factors.py`: function:RE_FormFactor (line 27)
-  - `import_CIF.py`: import-statement (line 6)
-  - `import_CIF.py`: function:importCIF (line 83)
+  - `form_factors.py`: import-statement (line 13)
+  - `form_factors.py`: function:RE_FormFactor (line 48)
+  - `import_CIF.py`: import-statement (line 23)
+  - `import_CIF.py`: function:importCIF (line 126)
   - `ligands.py`: import-statement (line 24)
   - `ligands.py`: class:Ligands → method:PointChargeModel (line 233)
   - `ligands.py`: class:LS_Ligands → method:__init__ (line 467)
@@ -721,32 +721,32 @@
 - **SPIN_ORBIT_COUPLING_CONSTANTS** *(line 418)* - 4 usages
   <details><summary>View usages</summary>
 
-  - `import_CIF.py`: import-statement (line 6)
-  - `import_CIF.py`: function:importCIF (line 106)
-  - `import_CIF.py`: function:importCIF (line 110)
-  - `import_CIF.py`: function:checkTMexist (line 134)
+  - `import_CIF.py`: import-statement (line 23)
+  - `import_CIF.py`: function:importCIF (line 149)
+  - `import_CIF.py`: function:importCIF (line 153)
+  - `import_CIF.py`: function:checkTMexist (line 189)
   </details>
 
 - **RADIAL_INTEGRALS_RARE_EARTH** *(line 496)* - 0 usages
 - **RADIAL_INTEGRALS_TRANS_METAL** *(line 513)* - 2 usages
   <details><summary>View usages</summary>
 
-  - `import_CIF.py`: import-statement (line 6)
-  - `import_CIF.py`: function:checkTMexist (line 132)
+  - `import_CIF.py`: import-statement (line 23)
+  - `import_CIF.py`: function:checkTMexist (line 187)
   </details>
 
 - **ION_HALF_FILLED** *(line 568)* - 2 usages
   <details><summary>View usages</summary>
 
-  - `import_CIF.py`: import-statement (line 6)
-  - `import_CIF.py`: function:checkTMexist (line 136)
+  - `import_CIF.py`: import-statement (line 23)
+  - `import_CIF.py`: function:checkTMexist (line 191)
   </details>
 
 - **ION_NOT_HALF_FILLED** *(line 581)* - 2 usages
   <details><summary>View usages</summary>
 
-  - `import_CIF.py`: import-statement (line 6)
-  - `import_CIF.py`: function:checkTMexist (line 136)
+  - `import_CIF.py`: import-statement (line 23)
+  - `import_CIF.py`: function:checkTMexist (line 191)
   </details>
 
 ### 📌 Variables
@@ -884,11 +884,7 @@
 
 ### 📊 Functions
 
-#### **importRE_FF()** *(line 4)*
-
-- **Used by:** 0 file
-
-#### **RE_FormFactor()** *(line 14)*
+#### **RE_FormFactor()** *(line 16)*
 
 - **Used by:** 7 files
 
@@ -902,6 +898,10 @@
 - `cf_levels.py`: class:LS_CFLevels → method:neutronSpectrum2D (line 933)
 - `cf_levels.py`: class:LS_CFLevels → method:neutronSpectrum2D (line 933)
 </details>
+
+#### **importRE_FF()** *(line 54)*
+
+- **Used by:** 0 file
 
 ---
 
@@ -1638,7 +1638,7 @@
 
 ### 📊 Functions
 
-#### **importCIF()** *(line 10)*
+#### **importCIF()** *(line 27)*
 
 - **Used by:** 1 file
 
@@ -1647,7 +1647,7 @@
 - `__init__.py`: import-statement (line 13)
 </details>
 
-#### **checkTMexist()** *(line 130)*
+#### **checkTMexist()** *(line 174)*
 
 - **Used by:** 0 file
 
@@ -1677,9 +1677,9 @@
 
 <details><summary>📍 View all 12 class usages</summary>
 
-- `cif_file.py`: import-statement (line 4)
-- `cif_file.py`: class:CifFile → method:__init__ (line 152)
-- `cif_file.py`: class:CifFile → method:__init__ (line 152)
+- `cif_file.py`: import-statement (line 19)
+- `cif_file.py`: class:CifFile → method:__init__ (line 192)
+- `cif_file.py`: class:CifFile → method:__init__ (line 192)
 - `ligands.py`: import-statement (line 23)
 - `ligands.py`: class:Ligands → method:__init__ (line 74)
 - `ligands.py`: class:Ligands → method:__init__ (line 74)
@@ -1720,8 +1720,8 @@
 - `PointChargeModel()` *(line 165)* - 5 usages
   <details><summary>View all 5 usages</summary>
 
-  - `import_CIF.py`: function:importCIF (line 93)
-  - `import_CIF.py`: function:importCIF (line 95)
+  - `import_CIF.py`: function:importCIF (line 136)
+  - `import_CIF.py`: function:importCIF (line 138)
   - `ligands.py`: class:Ligands → method:FitCharges (line 343)
   - `ligands.py`: class:Ligands → method:FitCharges (line 346)
   - `ligands.py`: class:LS_Ligands → method:FitChargesNeutrons (line 843)
@@ -1737,9 +1737,9 @@
 
 <details><summary>📍 View all 4 class usages</summary>
 
-- `import_CIF.py`: import-statement (line 7)
-- `import_CIF.py`: function:importCIF (line 88)
-- `import_CIF.py`: function:importCIF (line 88)
+- `import_CIF.py`: import-statement (line 24)
+- `import_CIF.py`: function:importCIF (line 132)
+- `import_CIF.py`: function:importCIF (line 132)
 - `__init__.py`: import-statement (line 11)
 </details>
 
@@ -1765,8 +1765,8 @@
 - `PointChargeModel()` *(line 524)* - 5 usages
   <details><summary>View all 5 usages</summary>
 
-  - `import_CIF.py`: function:importCIF (line 93)
-  - `import_CIF.py`: function:importCIF (line 95)
+  - `import_CIF.py`: function:importCIF (line 136)
+  - `import_CIF.py`: function:importCIF (line 138)
   - `ligands.py`: class:Ligands → method:FitCharges (line 343)
   - `ligands.py`: class:Ligands → method:FitCharges (line 346)
   - `ligands.py`: class:LS_Ligands → method:FitChargesNeutrons (line 843)
@@ -1775,8 +1775,8 @@
 - `TMPointChargeModel()` *(line 613)* - 2 usages
   <details><summary>View usages</summary>
 
-  - `import_CIF.py`: function:importCIF (line 113)
-  - `import_CIF.py`: function:importCIF (line 115)
+  - `import_CIF.py`: function:importCIF (line 156)
+  - `import_CIF.py`: function:importCIF (line 158)
   </details>
 
 - `UnknownTMPointChargeModel()` *(line 710)* - 0 usages
@@ -1784,13 +1784,13 @@
 
 <details><summary>📍 View all 8 class usages</summary>
 
-- `import_CIF.py`: import-statement (line 7)
-- `import_CIF.py`: function:importCIF (line 85)
-- `import_CIF.py`: function:importCIF (line 85)
-- `import_CIF.py`: function:importCIF (line 103)
-- `import_CIF.py`: function:importCIF (line 103)
-- `import_CIF.py`: function:importCIF (line 109)
-- `import_CIF.py`: function:importCIF (line 109)
+- `import_CIF.py`: import-statement (line 24)
+- `import_CIF.py`: function:importCIF (line 128)
+- `import_CIF.py`: function:importCIF (line 128)
+- `import_CIF.py`: function:importCIF (line 146)
+- `import_CIF.py`: function:importCIF (line 146)
+- `import_CIF.py`: function:importCIF (line 152)
+- `import_CIF.py`: function:importCIF (line 152)
 - `__init__.py`: import-statement (line 11)
 </details>
 
@@ -1806,50 +1806,50 @@
 
 ### 📊 Functions
 
-#### **MomIntertia()** *(line 5)*
-
-- **Used by:** 0 file
-
-#### **selectZaxisMI()** *(line 21)*
-
-- **Used by:** 0 file
-
-#### **ContinuousShapeMeasure()** *(line 40)*
-
-- **Used by:** 0 file
-
-#### **anglesToVector()** *(line 52)*
-
-- **Used by:** 0 file
-
-#### **rotationMatrix()** *(line 56)*
-
-- **Used by:** 0 file
-
-#### **rotateArbAxis()** *(line 72)*
-
-- **Used by:** 0 file
-
-#### **findZaxis_SOM_rotation()** *(line 80)*
-
-- **Used by:** 0 file
-
-#### **fitfun()** *(line 83)*
-
-- **Used by:** 0 file
-
-#### **findZaxis()** *(line 103)*
+#### **findZaxis()** *(line 19)*
 
 - **Used by:** 5 files
 
 <details><summary>View all 5 usages</summary>
 
-- `cif_symmetry_import.py`: import-statement (line 5)
-- `cif_symmetry_import.py`: function:FindPointGroupSymOps (line 176)
-- `cif_symmetry_import.py`: function:FindPointGroupSymOps (line 176)
-- `cif_symmetry_import.py`: function:FindPointGroupSymOps (line 248)
-- `cif_symmetry_import.py`: function:FindPointGroupSymOps (line 248)
+- `cif_symmetry_import.py`: import-statement (line 26)
+- `cif_symmetry_import.py`: function:FindPointGroupSymOps (line 197)
+- `cif_symmetry_import.py`: function:FindPointGroupSymOps (line 197)
+- `cif_symmetry_import.py`: function:FindPointGroupSymOps (line 269)
+- `cif_symmetry_import.py`: function:FindPointGroupSymOps (line 269)
 </details>
+
+#### **MomIntertia()** *(line 72)*
+
+- **Used by:** 0 file
+
+#### **selectZaxisMI()** *(line 100)*
+
+- **Used by:** 0 file
+
+#### **ContinuousShapeMeasure()** *(line 126)*
+
+- **Used by:** 0 file
+
+#### **anglesToVector()** *(line 147)*
+
+- **Used by:** 0 file
+
+#### **rotationMatrix()** *(line 162)*
+
+- **Used by:** 0 file
+
+#### **rotateArbAxis()** *(line 189)*
+
+- **Used by:** 0 file
+
+#### **findZaxis_SOM_rotation()** *(line 208)*
+
+- **Used by:** 0 file
+
+#### **fitfun()** *(line 224)*
+
+- **Used by:** 0 file
 
 ---
 
@@ -1903,9 +1903,9 @@
 
 <details><summary>View all 3 usages</summary>
 
-- `cif_symmetry_import.py`: import-statement (line 4)
-- `cif_symmetry_import.py`: function:FindPointGroupSymOps (line 319)
-- `cif_symmetry_import.py`: function:FindPointGroupSymOps (line 319)
+- `cif_symmetry_import.py`: import-statement (line 25)
+- `cif_symmetry_import.py`: function:FindPointGroupSymOps (line 340)
+- `cif_symmetry_import.py`: function:FindPointGroupSymOps (line 340)
 </details>
 
 ---
@@ -2046,8 +2046,8 @@
 | `spec` | VARIABLE | cf_levels.py | 717 |
 | `opttransition` | CLASS | cf_levels.py | 724 |
 | `LandeGFactor` | FUNCTION | cf_levels.py | 743 |
-| `findRotationAxis` | FUNCTION | cif_symmetry_import.py | 332 |
-| `makeSymOpMatrix` | FUNCTION | cif_symmetry_import.py | 382 |
+| `findRotationAxis` | FUNCTION | cif_symmetry_import.py | 353 |
+| `makeSymOpMatrix` | FUNCTION | cif_symmetry_import.py | 403 |
 | `ION_NUMS_TRANS_METAL` | CONSTANT | constants.py | 19 |
 | `_tesseral_dispatch` | FUNCTION | constants.py | 117 |
 | `PFgamma` | FUNCTION | constants.py | 238 |
@@ -2056,17 +2056,17 @@
 | `resultfunc` | FUNCTION | create_fit_function.py | 51 |
 | `makeCurveFitFunction` | FUNCTION | create_fit_function.py | 61 |
 | `resultfunc` | FUNCTION | create_fit_function.py | 106 |
-| `importRE_FF` | FUNCTION | form_factors.py | 4 |
-| `checkTMexist` | FUNCTION | import_CIF.py | 130 |
+| `importRE_FF` | FUNCTION | form_factors.py | 54 |
+| `checkTMexist` | FUNCTION | import_CIF.py | 174 |
 | `exportLigandCif` | FUNCTION | ligands.py | 353 |
-| `MomIntertia` | FUNCTION | moments_of_inertia.py | 5 |
-| `selectZaxisMI` | FUNCTION | moments_of_inertia.py | 21 |
-| `ContinuousShapeMeasure` | FUNCTION | moments_of_inertia.py | 40 |
-| `anglesToVector` | FUNCTION | moments_of_inertia.py | 52 |
-| `rotationMatrix` | FUNCTION | moments_of_inertia.py | 56 |
-| `rotateArbAxis` | FUNCTION | moments_of_inertia.py | 72 |
-| `findZaxis_SOM_rotation` | FUNCTION | moments_of_inertia.py | 80 |
-| `fitfun` | FUNCTION | moments_of_inertia.py | 83 |
+| `MomIntertia` | FUNCTION | moments_of_inertia.py | 72 |
+| `selectZaxisMI` | FUNCTION | moments_of_inertia.py | 100 |
+| `ContinuousShapeMeasure` | FUNCTION | moments_of_inertia.py | 126 |
+| `anglesToVector` | FUNCTION | moments_of_inertia.py | 147 |
+| `rotationMatrix` | FUNCTION | moments_of_inertia.py | 162 |
+| `rotateArbAxis` | FUNCTION | moments_of_inertia.py | 189 |
+| `findZaxis_SOM_rotation` | FUNCTION | moments_of_inertia.py | 208 |
+| `fitfun` | FUNCTION | moments_of_inertia.py | 224 |
 | `atomplot` | CLASS | plotPCF.py | 43 |
 | `rescaleCEF` | FUNCTION | rescaleCEF.py | 5 |
 | `partition_func` | FUNCTION | thermo_functions.py | 6 |
