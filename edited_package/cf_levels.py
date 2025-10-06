@@ -1461,6 +1461,7 @@ class LS_CFLevels:
             ...                  L=3, S=1, SpinOrbitCoupling=-0.05)
         """
 
+        # Build crystal field Hamiltonian (acts on orbital states only)
         self.H_CEF = LSOperator(L, S)
         HcefJ = np.sum([a*b for a,b in zip(StevensOperators, Parameters)], axis=0)
         self.H_CEF.O = HcefJ
