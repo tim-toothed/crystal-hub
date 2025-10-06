@@ -235,7 +235,6 @@ def findZaxis_SOM_rotation(atoms, angle):
             startX0s.append([np.arcsin(z/norm), np.arctan(y/x)])
             startFF.append(fitfun(startX0s[-1]))        
     x0 = startX0s[np.argmin(startFF)]
-    #print(x0)
 
     res = minimize(fitfun, x0=x0, method='Powell')
     return np.array(anglesToVector(*res.x)), res.fun
