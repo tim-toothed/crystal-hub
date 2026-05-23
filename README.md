@@ -1,3 +1,5 @@
+Публичная работа над проектом была приостановлена со стороны института.
+
 # crystal-hub
 The code repository for Python package about crystal-related calculations in physics
 
